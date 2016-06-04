@@ -26,6 +26,15 @@ def Close_bracket_produces_Close_bracket_token():
     assert_that( lexed( ")" ), equals( [CloseBracketToken()] ) )
 
 
+@test
+def Multiple_brackets_become_multiple_tokens():
+    assert_that(
+        lexed( "()" ),
+        equals( [OpenBracketToken(), CloseBracketToken()] )
+    )
+
+
+
 # --- Details ---
 
 @test
