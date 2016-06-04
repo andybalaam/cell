@@ -55,3 +55,7 @@ That's about it.
 Cell provides more complex data structures using functions.  (More info
 coming soon, but see Lisp's `cons` etc. for the general idea.)
 
+## Details
+
+* [Lexing](lexing.md)
+
