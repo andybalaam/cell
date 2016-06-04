@@ -10,13 +10,17 @@ def lex( chars ):
         elif c == ")":
             yield CloseBracketToken()
 
+def token( cl ):
+    def token_eq( self, other ):
+        return type( other ) == type( self )
+    cl.__eq__ = token_eq
+    return cl
 
+@token
 class OpenBracketToken:
-    def __eq__( self, other ):
-        return type( other ) == OpenBracketToken
+    pass
 
+@token
 class CloseBracketToken:
-    def __eq__( self, other ):
-        return type( other ) == CloseBracketToken
-
+    pass
 
