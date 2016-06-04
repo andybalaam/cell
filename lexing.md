@@ -1,9 +1,9 @@
 # Lexing in Cell
 
-A lexer is a part of a programming language turns characters in a text file
-into "tokens" which are the basic building blocks of the language.  An example
-of a token is the number "351", which is made out of three characters: "3",
-"5", and "1".
+A lexer is a part of a programming language that turns characters in a text
+file into "tokens" which are the basic building blocks of the language.  An
+example of a token is the number `351`, which is made out of three characters:
+"3", "5", and "1".
 
 The lexer reads in characters one by one, and decides what type of token they
 are, and then spits out tokens as it finds them.
