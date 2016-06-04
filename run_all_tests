@@ -1,0 +1,40 @@
+#!/usr/bin/env python3
+
+import types
+
+import tests.lexer_tests
+from tests.util.test import TestFunctionType
+
+def hidden_name( name ):
+    return name.startswith( "__" )
+
+def is_mod_or_fun( obj ):
+    return (
+           isinstance( obj, types.ModuleType )
+        or isinstance( obj, TestFunctionType )
+    )
+
+def d( mod ):
+    return ( v for ( k, v ) in mod.__dict__.items()
+        if not hidden_name( k ) and is_mod_or_fun( v )
+    )
+
+
+def all_test_fns( mod ):
+    ret = []
+    for (k,v) in mod.__dict__.items():
+        if not hidden_name( k ):
+            if isinstance( v, types.ModuleType ):
+                ret += all_test_fns( v )
+            elif isinstance( v, TestFunctionType ):
+                ret.append( ( mod.__name__ + "." + k, v ) )
+    return ret
+
+
+for (name, test) in all_test_fns( tests ):
+    print( "  " + name )
+    test()
+
+print( "All tests passed." )
+
+
