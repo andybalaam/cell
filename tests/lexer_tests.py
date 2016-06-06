@@ -4,6 +4,7 @@ from tests.util.test import test
 
 from cell.lexer import (
     lex,
+    LexingError,
     ArithmeticToken,
     CloseBraceToken,
     CloseBracketToken,
@@ -213,6 +214,16 @@ def Example_program_from_README_lexes():
     print( answer );
 """
     lexed(example)
+
+
+@test
+def Tabs_are_an_error():
+    try:
+        lexed("aaa\tbbb")
+        fail("Should throw")
+    except LexingError as e:
+        assert_that(str(e), equals("Tab characters are not allowed in Cell"))
+
 
 # --- Details ---
 

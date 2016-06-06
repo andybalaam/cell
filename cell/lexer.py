@@ -117,6 +117,8 @@ def lex(chars):
             yield _number(c, chars_p)
         elif _is_letter(c):
             yield _symbol(c, chars_p)
+        elif c == "\t":
+            raise LexingError("Tab characters are not allowed in Cell")
         else:
             raise LexingError("Unrecognised character: '" + c + "'.")
 
