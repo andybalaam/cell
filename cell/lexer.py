@@ -6,42 +6,21 @@ from cell.valueclass import valueclass
 from cell.iterator import Iterator
 
 
-_number_or_decimal_point_re = re.compile("[.0-9]")
-_letter_or_underscore_re = re.compile("[_a-zA-Z]")
-_letter_number_underscore_re = re.compile("[_a-zA-Z0-9]")
-
-
 def _is_number_or_decimal_point(c):
-    return c is not None and _number_or_decimal_point_re.match(c)
+    return c is not None and re.match("[.0-9]", c)
 
 
-def _is_letter_or_underscore(c):
-    return c is not None and _letter_or_underscore_re.match(c)
-
-
-def _is_letter_number_or_underscore(c):
-    return c is not None and _letter_number_underscore_re.match(c)
-
-
-def _symbol(first_char, chars_p):
+def _scan(first_char, chars_p, allowed):
     assert type(chars_p) is PeekableStream
     ret = first_char
-    while _is_letter_number_or_underscore(chars_p.peek):
-        c = chars_p.next()
-        ret += c
+    p = chars_p.peek
+    while p is not None and re.match(allowed, p):
+        ret += chars_p.next()
+        p = chars_p.peek
     return ret
 
 
-def _number(first_char, chars_p):
-    assert type(chars_p) is PeekableStream
-    ret = first_char
-    while _is_number_or_decimal_point(chars_p.peek):
-        c = chars_p.next()
-        ret += c
-    return ret
-
-
-def _string(delim, chars_p):
+def _scan_string(delim, chars_p):
     assert type(chars_p) is PeekableStream
     ret = ""
     while chars_p.peek != delim:
@@ -95,7 +74,7 @@ def lex(chars):
         elif c in " \n":
             pass
         elif c in ("'", '"'):
-            yield StringToken(_string(c, chars_p))
+            yield StringToken(_scan_string(c, chars_p))
         elif c == ",":
             yield CommaToken()
         elif c == ";":
@@ -106,10 +85,10 @@ def lex(chars):
             yield ColonToken()
         elif c in "+-*/":
             yield ArithmeticToken(c)
-        elif _is_number_or_decimal_point(c):
-            yield NumberToken(_number(c, chars_p))
-        elif _is_letter_or_underscore(c):
-            yield SymbolToken(_symbol(c, chars_p))
+        elif re.match("[.0-9]", c):
+            yield NumberToken(_scan(c, chars_p, "[.0-9]"))
+        elif re.match("[_a-zA-Z]", c):
+            yield SymbolToken(_scan(c, chars_p, "[_a-zA-Z0-9]"))
         elif c == "\t":
             raise LexingError("Tab characters are not allowed in Cell")
         else:
