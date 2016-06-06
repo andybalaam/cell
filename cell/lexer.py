@@ -29,7 +29,7 @@ def _symbol(first_char, chars_p):
     while _is_letter_number_or_underscore(chars_p.peek):
         c = chars_p.next()
         ret += c
-    return SymbolToken(ret)
+    return ret
 
 
 def _number(first_char, chars_p):
@@ -38,7 +38,7 @@ def _number(first_char, chars_p):
     while _is_number_or_decimal_point(chars_p.peek):
         c = chars_p.next()
         ret += c
-    return NumberToken(ret)
+    return ret
 
 
 def _string(delim, chars_p):
@@ -50,7 +50,7 @@ def _string(delim, chars_p):
             raise LexingError("A string ran off the end of the program!")
         ret += c
     chars_p.next()
-    return StringToken(ret)
+    return ret
 
 
 class LexingError(Exception):
@@ -95,7 +95,7 @@ def lex(chars):
         elif c in " \n":
             pass
         elif c in ("'", '"'):
-            yield _string(c, chars_p)
+            yield StringToken(_string(c, chars_p))
         elif c == ",":
             yield CommaToken()
         elif c == ";":
@@ -107,9 +107,9 @@ def lex(chars):
         elif c in "+-*/":
             yield ArithmeticToken(c)
         elif _is_number_or_decimal_point(c):
-            yield _number(c, chars_p)
+            yield NumberToken(_number(c, chars_p))
         elif _is_letter_or_underscore(c):
-            yield _symbol(c, chars_p)
+            yield SymbolToken(_symbol(c, chars_p))
         elif c == "\t":
             raise LexingError("Tab characters are not allowed in Cell")
         else:
