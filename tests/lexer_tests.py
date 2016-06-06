@@ -210,24 +210,24 @@ def Multiple_token_types_can_be_combined():
 
 
 @test
-def Example_program_from_README_lexes():
+def A_complex_example_program_lexes():
     example = """
-    double =
-        {:(x)
-            2 * x;
-        };
+        double =
+            {:(x)
+                2 * x;
+            };
 
-    num1 = 3;
-    num2 = double( num );
+        num1 = 3;
+        num2 = double( num );
 
-    answer =
-        if( greater_than( num2, 5 ),
-            {"LARGE!"},
-            {"small."}
-        );
+        answer =
+            if( greater_than( num2, 5 ),
+                {"LARGE!"},
+                {"small."}
+            );
 
-    print( answer );
-"""
+        print( answer );
+    """
     lexed(example)
 
 
