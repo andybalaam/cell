@@ -37,13 +37,35 @@ def Multiple_brackets_become_multiple_tokens():
 
 
 @test
-def Single_character_symbol():
+def Single_letter_becomes_a_symbol_token():
     assert_that(lexed("a"), equals([SymbolToken("a")]))
 
 
 @test
-def Multi_character_symbol():
+def Multiple_letters_become_a_symbol_token():
     assert_that(lexed("foo"), equals([SymbolToken("foo")]))
+
+
+@test
+def A_symbol_followed_by_a_bracket_becomes_two_tokens():
+    assert_that(
+        lexed("foo("),
+        equals([SymbolToken("foo"), OpenBracketToken()])
+    )
+
+
+@test
+def Items_separated_by_spaces_become_separate_tokens():
+    assert_that(
+        lexed("foo bar ( "),
+        equals(
+            [
+                SymbolToken("foo"),
+                SymbolToken("bar"),
+                OpenBracketToken()
+            ]
+        )
+    )
 
 
 # --- Details ---
