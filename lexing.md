@@ -19,9 +19,10 @@ Cell programs only contain ASCII characters.
 
 The types of tokens Cell recognises are:
 
-* Numbers (starting with `0`-`9`, containing `0`-`9` and possibly one `.`).
+* Numbers (containing `0`-`9` characters, and possibly one `.`).
 * Strings (starting and ending with `"`, containing any other characters).
-* Some special punctuation: `(),{};`.
+* Some special punctuation: `(),{};:=`.
+* Arithmetic operations: `+-*/`.
 * Symbols (starting with a letter, containing any letter, number or an
   underscore).
 * Spaces and newlines, which are just used to separate tokens, and
