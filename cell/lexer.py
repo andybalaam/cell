@@ -1,29 +1,52 @@
 
-from cell.pyutil import assert_implements
+from cell.assert_implements import assert_implements
+from cell.valueclass import valueclass
 from cell.iterable import Iterable
+
+
+def _is_letter(c):
+    return True
+
+
+def _symbol(first_char, chars_iter):
+    ret = first_char
+    for c in chars_iter:
+        if not _is_letter(c):
+            break
+        ret += c
+    return SymbolToken(ret)
+
+
+class LexingError(Exception):
+    pass
 
 
 def lex(chars):
     assert_implements(chars, Iterable)
-    for c in chars:
+    chars_iter = chars.__iter__()
+    for c in chars_iter:
         if c == "(":
             yield OpenBracketToken()
         elif c == ")":
             yield CloseBracketToken()
+        elif _is_letter(c):
+            yield _symbol(c, chars_iter)
+        else:
+            raise LexingError("Unrecognised character: '" + c + "'.")
 
 
-def token(cl):
-    def token_eq(self, other):
-        return isinstance(other, type(self))
-    cl.__eq__ = token_eq
-    return cl
+@valueclass("name")
+class SymbolToken:
+
+    def __init__(self, name):
+        self.name = name
 
 
-@token
+@valueclass()
 class OpenBracketToken:
     pass
 
 
-@token
+@valueclass()
 class CloseBracketToken:
     pass

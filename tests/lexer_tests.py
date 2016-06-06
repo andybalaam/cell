@@ -2,7 +2,7 @@
 from tests.util.asserts import assert_that, equals, is_not
 from tests.util.test import test
 
-from cell.lexer import lex, OpenBracketToken, CloseBracketToken
+from cell.lexer import lex, OpenBracketToken, CloseBracketToken, SymbolToken
 
 # --- Utils ---
 
@@ -36,7 +36,18 @@ def Multiple_brackets_become_multiple_tokens():
     )
 
 
+@test
+def Single_character_symbol():
+    assert_that(lexed("a"), equals([SymbolToken("a")]))
+
+
+@test
+def Multi_character_symbol():
+    assert_that(lexed("foo"), equals([SymbolToken("foo")]))
+
+
 # --- Details ---
+
 
 @test
 def Open_bracket_token_is_equal_to_open_bracket_token():
