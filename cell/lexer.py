@@ -12,11 +12,17 @@ _letter_re = re.compile("[a-zA-Z]")
 def _is_letter(c):
     return c is not None and _letter_re.match(c)
 
+_letter_number_underscore_re = re.compile("[_a-zA-Z0-9]")
+
+
+def _is_letter_number_or_underscore(c):
+    return c is not None and _letter_number_underscore_re.match(c)
+
 
 def _symbol(first_char, chars_p):
     assert type(chars_p) is PeekableStream
     ret = first_char
-    while _is_letter(chars_p.peek()):
+    while _is_letter_number_or_underscore(chars_p.peek()):
         c = chars_p.next()
         ret += c
     return SymbolToken(ret)

@@ -68,6 +68,19 @@ def Items_separated_by_spaces_become_separate_tokens():
     )
 
 
+@test
+def Symbols_may_contain_numbers_and_underscores():
+    assert_that(
+        lexed("foo2_bar ( "),
+        equals(
+            [
+                SymbolToken("foo2_bar"),
+                OpenBracketToken()
+            ]
+        )
+    )
+
+
 # --- Details ---
 
 
