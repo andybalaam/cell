@@ -26,14 +26,10 @@ def _scan_string(delim, chars_p):
     while chars_p.peek != delim:
         c = chars_p.next()
         if c is None:
-            raise LexingError("A string ran off the end of the program!")
+            raise Exception("A string ran off the end of the program!")
         ret += c
     chars_p.next()
     return ret
-
-
-class LexingError(Exception):
-    pass
 
 
 class PeekableStream:
@@ -90,9 +86,9 @@ def lex(chars):
         elif re.match("[_a-zA-Z]", c):
             yield SymbolToken(_scan(c, chars_p, "[_a-zA-Z0-9]"))
         elif c == "\t":
-            raise LexingError("Tab characters are not allowed in Cell")
+            raise Exception("Tab characters are not allowed in Cell")
         else:
-            raise LexingError("Unrecognised character: '" + c + "'.")
+            raise Exception("Unrecognised character: '" + c + "'.")
 
 
 @valueclass("value")

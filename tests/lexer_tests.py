@@ -6,7 +6,6 @@ from tests.util.all_examples import all_examples
 
 from cell.lexer import (
     lex,
-    LexingError,
     ArithmeticToken,
     CloseBraceToken,
     CloseBracketToken,
@@ -175,7 +174,7 @@ def An_unfinished_string_is_an_error():
     try:
         lexed('"foo')
         fail("Should throw")
-    except LexingError as e:
+    except Exception as e:
         assert_that(str(e), equals("A string ran off the end of the program!"))
 
 
@@ -256,7 +255,7 @@ def Tabs_are_an_error():
     try:
         lexed("aaa\tbbb")
         fail("Should throw")
-    except LexingError as e:
+    except Exception as e:
         assert_that(str(e), equals("Tab characters are not allowed in Cell"))
 
 
