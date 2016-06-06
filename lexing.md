@@ -23,8 +23,8 @@ The types of tokens Cell recognises are:
 * Strings (starting and ending with `"`, containing any other characters).
 * Some special punctuation: `(),{};:=`.
 * Arithmetic operations: `+-*/`.
-* Symbols (starting with a letter, containing any letter, number or an
-  underscore).
+* Symbols (starting with a letter or underscore, containing any letter, number
+  or an underscore).
 * Spaces and newlines, which are just used to separate tokens, and
   otherwise have no meaning (tabs are not allowed).
 
