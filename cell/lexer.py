@@ -26,7 +26,7 @@ def _is_letter_number_or_underscore(c):
 def _symbol(first_char, chars_p):
     assert type(chars_p) is PeekableStream
     ret = first_char
-    while _is_letter_number_or_underscore(chars_p.peek()):
+    while _is_letter_number_or_underscore(chars_p.peek):
         c = chars_p.next()
         ret += c
     return SymbolToken(ret)
@@ -35,7 +35,7 @@ def _symbol(first_char, chars_p):
 def _number(first_char, chars_p):
     assert type(chars_p) is PeekableStream
     ret = first_char
-    while _is_number_or_decimal_point(chars_p.peek()):
+    while _is_number_or_decimal_point(chars_p.peek):
         c = chars_p.next()
         ret += c
     return NumberToken(ret)
@@ -44,7 +44,7 @@ def _number(first_char, chars_p):
 def _string(delim, chars_p):
     assert type(chars_p) is PeekableStream
     ret = ""
-    while chars_p.peek() != delim:
+    while chars_p.peek != delim:
         c = chars_p.next()
         if c is None:
             raise LexingError("A string ran off the end of the program!")
@@ -69,18 +69,12 @@ class PeekableStream:
 
     def _fill(self):
         try:
-            self._next = self.iterator.__next__()
+            self.peek = self.iterator.__next__()
         except StopIteration:
-            self._next = None
-
-    def peek(self):
-        return self._next
-
-    def stopped(self):
-        return self.peek() is None
+            self.peek = None
 
     def next(self):
-        ret = self.peek()
+        ret = self.peek
         self._fill()
         return ret
 
@@ -88,7 +82,7 @@ class PeekableStream:
 def lex(chars):
     assert_implements(chars, Iterator)
     chars_p = PeekableStream(chars)
-    while not chars_p.stopped():
+    while chars_p.peek is not None:
         c = chars_p.next()
         if c == "(":
             yield OpenBracketToken()
