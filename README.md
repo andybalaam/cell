@@ -17,10 +17,10 @@ num2 = square( num1 );
 
 if( equal( num1, num2 ),
     {
-        print( "num1 equals num2." )
+        print( "num1 equals num2." );
     },
     {
-        print( "num1 does not equal num2." )
+        print( "num1 does not equal num2." );
     }
 );
 ```
