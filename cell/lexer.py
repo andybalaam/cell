@@ -7,7 +7,7 @@ from cell.iterable import Iterable
 
 
 _number_or_decimal_point_re = re.compile("[.0-9]")
-_letter_re = re.compile("[a-zA-Z]")
+_letter_or_underscore_re = re.compile("[_a-zA-Z]")
 _letter_number_underscore_re = re.compile("[_a-zA-Z0-9]")
 
 
@@ -15,8 +15,8 @@ def _is_number_or_decimal_point(c):
     return c is not None and _number_or_decimal_point_re.match(c)
 
 
-def _is_letter(c):
-    return c is not None and _letter_re.match(c)
+def _is_letter_or_underscore(c):
+    return c is not None and _letter_or_underscore_re.match(c)
 
 
 def _is_letter_number_or_underscore(c):
@@ -112,7 +112,7 @@ def lex(chars):
             yield ArithmeticToken(c)
         elif _is_number_or_decimal_point(c):
             yield _number(c, chars_p)
-        elif _is_letter(c):
+        elif _is_letter_or_underscore(c):
             yield _symbol(c, chars_p)
         elif c == "\t":
             raise LexingError("Tab characters are not allowed in Cell")

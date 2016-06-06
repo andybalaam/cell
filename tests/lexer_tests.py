@@ -120,6 +120,19 @@ def Symbols_may_contain_numbers_and_underscores():
 
 
 @test
+def Symbols_may_start_with_underscores():
+    assert_that(
+        lexed("_foo2_bar ( "),
+        equals(
+            [
+                SymbolToken("_foo2_bar"),
+                OpenBracketToken()
+            ]
+        )
+    )
+
+
+@test
 def Integers_are_parsed_into_number_tokens():
     assert_that(lexed("128"), equals([NumberToken("128")]))
 
