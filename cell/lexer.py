@@ -7,19 +7,16 @@ from cell.iterable import Iterable
 
 
 _number_or_decimal_point_re = re.compile("[.0-9]")
+_letter_re = re.compile("[a-zA-Z]")
+_letter_number_underscore_re = re.compile("[_a-zA-Z0-9]")
 
 
 def _is_number_or_decimal_point(c):
     return c is not None and _number_or_decimal_point_re.match(c)
 
 
-_letter_re = re.compile("[a-zA-Z]")
-
-
 def _is_letter(c):
     return c is not None and _letter_re.match(c)
-
-_letter_number_underscore_re = re.compile("[_a-zA-Z0-9]")
 
 
 def _is_letter_number_or_underscore(c):
