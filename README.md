@@ -10,21 +10,19 @@ Here is an example program:
 
 <!-- include "examples/example1.cell" -->
 ```
-double =
-    {:(x)
-        2 * x;
-    };
+square = {:(x) x * x;};
 
 num1 = 3;
-num2 = double( num );
+num2 = square( num1 );
 
-answer =
-    if( greater_than( num2, 5 ),
-        {"LARGE!"},
-        {"small."}
-    );
-
-print( answer );
+if( equal( num1, num2 ),
+    {
+        print( "num1 equals num2." )
+    },
+    {
+        print( "num1 does not equal num2." )
+    }
+);
 ```
 <!-- end_include -->
 
@@ -32,7 +30,7 @@ This prints:
 
 <!-- include "examples/example1.output.txt" -->
 ```
-LARGE!
+num1 does not equal num2.
 ```
 <!-- end_include -->
 
