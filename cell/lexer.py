@@ -3,7 +3,7 @@ import re
 
 from cell.assert_implements import assert_implements
 from cell.valueclass import valueclass
-from cell.iterable import Iterable
+from cell.iterator import Iterator
 
 
 _number_or_decimal_point_re = re.compile("[.0-9]")
@@ -60,14 +60,14 @@ class PeekableStream:
     Turns an iterator into something we can peek ahead one item of.
     """
 
-    def __init__(self, iterable):
-        assert_implements(iterable, Iterable)
-        self.iterable = iterable.__iter__()
+    def __init__(self, iterator):
+        assert_implements(iterator, Iterator)
+        self.iterator = iter(iterator)
         self._fill()
 
     def _fill(self):
         try:
-            self._next = self.iterable.__next__()
+            self._next = self.iterator.__next__()
         except StopIteration:
             self._next = None
 
@@ -84,7 +84,7 @@ class PeekableStream:
 
 
 def lex(chars):
-    assert_implements(chars, Iterable)
+    assert_implements(chars, Iterator)
     chars_p = PeekableStream(chars)
     while not chars_p.stopped():
         c = chars_p.next()

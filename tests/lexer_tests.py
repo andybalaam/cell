@@ -1,6 +1,8 @@
 
 from tests.util.asserts import assert_that, equals, is_not, fail
 from tests.util.test import test
+from tests.util.system_test import system_test
+from tests.util.all_examples import all_examples
 
 from cell.lexer import (
     lex,
@@ -236,6 +238,17 @@ def Tabs_are_an_error():
         fail("Should throw")
     except LexingError as e:
         assert_that(str(e), equals("Tab characters are not allowed in Cell"))
+
+
+# --- Example programs ---
+
+
+@system_test
+def All_examples_lex():
+    from cell.chars_in_file import chars_in_file
+    for example in all_examples():
+        with open(example, encoding="ascii") as f:
+            lexed(chars_in_file(f))
 
 
 # --- Details ---
