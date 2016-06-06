@@ -24,9 +24,9 @@ def equals(expected):
 
         def description(self):
             return (
-                str(self.actual)
+                repr(self.actual)
                 + " does not equal "
-                + str(self.expected)
+                + repr(self.expected)
                 + " as expected."
             )
     return EqualsMatcher(expected)
@@ -50,3 +50,7 @@ def is_not(expected):
                 + " but we expected it not to."
             )
     return NotEqualsMatcher(expected)
+
+
+def fail(msg):
+    raise AssertionError(msg)
