@@ -8,6 +8,7 @@ write a programming language.
 
 Here is an example program:
 
+<!-- include "examples/example1.cell" -->
 ```
 double =
     {:(x)
@@ -25,12 +26,15 @@ answer =
 
 print( answer );
 ```
+<!-- end_include -->
 
 This prints:
 
+<!-- include "examples/example1.output.txt" -->
 ```
 LARGE!
 ```
+<!-- end_include -->
 
 ## Design Principles
 

@@ -1,0 +1,15 @@
+double =
+    {:(x)
+        2 * x;
+    };
+
+num1 = 3;
+num2 = double( num );
+
+answer =
+    if( greater_than( num2, 5 ),
+        {"LARGE!"},
+        {"small."}
+    );
+
+print( answer );

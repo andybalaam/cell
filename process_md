@@ -1,0 +1,52 @@
+#!/usr/bin/env python3
+
+import re
+import sys
+
+include_file_re = re.compile(r'^<!-- include "([^"]*)" -->\n$')
+end_include_re = re.compile(r'^<!-- end_include -->\n$')
+
+
+def find_include_file(line):
+    m = include_file_re.match(line)
+    return m.group(1) if m else None
+
+
+def find_end_include(line):
+    return end_include_re.match(line)
+
+
+def include(filename):
+    with open(filename) as f:
+        return """```
+%s```
+<!-- end_include -->
+""" % f.read()
+
+
+def fast_forward_to_end_include(it):
+    for line in it:
+        if find_end_include(line):
+            break
+    return it
+
+
+def main(argv):
+    assert len(argv) == 2
+
+    filename = argv[1]
+    contents = ""
+    with open(filename, "r") as f:
+        it = f.__iter__()
+        for line in it:
+            contents += line
+            include_filename = find_include_file(line)
+            if include_filename is not None:
+                contents += include(include_filename)
+                it = fast_forward_to_end_include(it)
+
+    with open(filename, "w") as f:
+        f.write(contents)
+
+if __name__ == "__main__":
+    main(sys.argv)
