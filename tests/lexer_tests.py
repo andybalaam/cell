@@ -2,7 +2,13 @@
 from tests.util.asserts import assert_that, equals, is_not
 from tests.util.test import test
 
-from cell.lexer import lex, OpenBracketToken, CloseBracketToken, SymbolToken
+from cell.lexer import (
+    lex,
+    CloseBracketToken,
+    NumberToken,
+    OpenBracketToken,
+    SymbolToken
+)
 
 # --- Utils ---
 
@@ -79,6 +85,21 @@ def Symbols_may_contain_numbers_and_underscores():
             ]
         )
     )
+
+
+@test
+def Integers_are_parsed_into_number_tokens():
+    assert_that(lexed("128"), equals([NumberToken("128")]))
+
+
+@test
+def Floating_points_are_parsed_into_number_tokens():
+    assert_that(lexed("12.8"), equals([NumberToken("12.8")]))
+
+
+@test
+def Leading_decimal_point_produces_number_token():
+    assert_that(lexed(".812"), equals([NumberToken(".812")]))
 
 
 # --- Details ---

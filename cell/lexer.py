@@ -6,6 +6,13 @@ from cell.valueclass import valueclass
 from cell.iterable import Iterable
 
 
+_number_or_decimal_point_re = re.compile("[.0-9]")
+
+
+def _is_number_or_decimal_point(c):
+    return c is not None and _number_or_decimal_point_re.match(c)
+
+
 _letter_re = re.compile("[a-zA-Z]")
 
 
@@ -26,6 +33,15 @@ def _symbol(first_char, chars_p):
         c = chars_p.next()
         ret += c
     return SymbolToken(ret)
+
+
+def _number(first_char, chars_p):
+    assert type(chars_p) is PeekableStream
+    ret = first_char
+    while _is_number_or_decimal_point(chars_p.peek()):
+        c = chars_p.next()
+        ret += c
+    return NumberToken(ret)
 
 
 class LexingError(Exception):
@@ -71,6 +87,8 @@ def lex(chars):
             yield CloseBracketToken()
         elif c == " ":
             pass
+        elif _is_number_or_decimal_point(c):
+            yield _number(c, chars_p)
         elif _is_letter(c):
             yield _symbol(c, chars_p)
         else:
@@ -79,6 +97,11 @@ def lex(chars):
 
 @valueclass("name")
 class SymbolToken:
+    pass
+
+
+@valueclass("value")
+class NumberToken:
     pass
 
 
