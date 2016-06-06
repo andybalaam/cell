@@ -44,6 +44,16 @@ def _number(first_char, chars_p):
     return NumberToken(ret)
 
 
+def _string(chars_p):
+    assert type(chars_p) is PeekableStream
+    ret = ""
+    while chars_p.peek() not in (None, '"'):
+        c = chars_p.next()
+        ret += c
+    chars_p.next()
+    return StringToken(ret)
+
+
 class LexingError(Exception):
     pass
 
@@ -85,8 +95,24 @@ def lex(chars):
             yield OpenBracketToken()
         elif c == ")":
             yield CloseBracketToken()
-        elif c == " ":
+        elif c == "{":
+            yield OpenBraceToken()
+        elif c == "}":
+            yield CloseBraceToken()
+        elif c in " \n":
             pass
+        elif c == '"':
+            yield _string(chars_p)
+        elif c == ",":
+            yield CommaToken()
+        elif c == ";":
+            yield SemiColonToken()
+        elif c == "=":
+            yield EqualsToken()
+        elif c == ":":
+            yield ColonToken()
+        elif c in "+-*/":
+            yield ArithmeticToken(c)
         elif _is_number_or_decimal_point(c):
             yield _number(c, chars_p)
         elif _is_letter(c):
@@ -95,8 +121,33 @@ def lex(chars):
             raise LexingError("Unrecognised character: '" + c + "'.")
 
 
-@valueclass("name")
-class SymbolToken:
+@valueclass("value")
+class ArithmeticToken:
+    pass
+
+
+@valueclass()
+class CloseBraceToken:
+    pass
+
+
+@valueclass()
+class CloseBracketToken:
+    pass
+
+
+@valueclass()
+class ColonToken:
+    pass
+
+
+@valueclass()
+class CommaToken:
+    pass
+
+
+@valueclass()
+class EqualsToken:
     pass
 
 
@@ -106,10 +157,25 @@ class NumberToken:
 
 
 @valueclass()
+class OpenBraceToken:
+    pass
+
+
+@valueclass()
 class OpenBracketToken:
     pass
 
 
 @valueclass()
-class CloseBracketToken:
+class SemiColonToken:
+    pass
+
+
+@valueclass("value")
+class StringToken:
+    pass
+
+
+@valueclass("name")
+class SymbolToken:
     pass

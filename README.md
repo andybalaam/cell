@@ -18,7 +18,7 @@ num1 = 3;
 num2 = double( num );
 
 answer =
-    if( num2 > 5,
+    if( greater_than( num2, 5 ),
         {"LARGE!"},
         {"small."}
     );
