@@ -160,6 +160,15 @@ def Empty_quotes_produce_an_empty_string_token():
 
 
 @test
+def An_unfinished_string_is_an_error():
+    try:
+        lexed('"foo')
+        fail("Should throw")
+    except LexingError as e:
+        assert_that(str(e), equals("A string ran off the end of the program!"))
+
+
+@test
 def Commas_produce_comma_tokens():
     assert_that(lexed(","), equals([CommaToken()]))
 

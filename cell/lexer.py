@@ -44,8 +44,10 @@ def _number(first_char, chars_p):
 def _string(chars_p):
     assert type(chars_p) is PeekableStream
     ret = ""
-    while chars_p.peek() not in (None, '"'):
+    while chars_p.peek() != '"':
         c = chars_p.next()
+        if c is None:
+            raise LexingError("A string ran off the end of the program!")
         ret += c
     chars_p.next()
     return StringToken(ret)
