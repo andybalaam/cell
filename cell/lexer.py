@@ -41,10 +41,10 @@ def _number(first_char, chars_p):
     return NumberToken(ret)
 
 
-def _string(chars_p):
+def _string(delim, chars_p):
     assert type(chars_p) is PeekableStream
     ret = ""
-    while chars_p.peek() != '"':
+    while chars_p.peek() != delim:
         c = chars_p.next()
         if c is None:
             raise LexingError("A string ran off the end of the program!")
@@ -100,8 +100,8 @@ def lex(chars):
             yield CloseBraceToken()
         elif c in " \n":
             pass
-        elif c == '"':
-            yield _string(chars_p)
+        elif c in ("'", '"'):
+            yield _string(c, chars_p)
         elif c == ",":
             yield CommaToken()
         elif c == ";":

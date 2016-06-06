@@ -20,7 +20,8 @@ Cell programs only contain ASCII characters.
 The types of tokens Cell recognises are:
 
 * Numbers (containing `0`-`9` characters, and possibly one `.`).
-* Strings (starting and ending with `"`, containing any other characters).
+* Strings (starting and ending with `"` or starting and ending with `'`,
+  containing any other characters).
 * Some special punctuation: `(),{};:=`.
 * Arithmetic operations: `+-*/`.
 * Symbols (starting with a letter or underscore, containing any letter, number

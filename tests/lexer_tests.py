@@ -150,8 +150,19 @@ def Leading_decimal_point_produces_number_token():
 
 
 @test
-def Quoted_values_produce_string_tokens():
+def Double_quoted_values_produce_string_tokens():
     assert_that(lexed('"foo"'), equals([StringToken('foo')]))
+
+
+@test
+def Single_quoted_values_produce_string_tokens():
+    assert_that(lexed("'foo'"), equals([StringToken('foo')]))
+
+
+@test
+def Different_quote_types_allow_the_other_type_inside():
+    assert_that(lexed("'f\"oo'"), equals([StringToken('f"oo')]))
+    assert_that(lexed('"f\'oo"'), equals([StringToken("f'oo")]))
 
 
 @test
