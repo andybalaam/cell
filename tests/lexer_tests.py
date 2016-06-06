@@ -1,5 +1,5 @@
 
-from tests.util.asserts import assert_that, equals, is_not
+from tests.util.asserts import assert_that, equals, is_not, fail
 from tests.util.test import test
 
 from cell.lexer import (
