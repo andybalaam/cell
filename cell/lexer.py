@@ -2,7 +2,6 @@ import re
 
 
 def _scan(first_char, chars, allowed):
-    assert type(chars) is PeekableStream
     ret = first_char
     p = chars.next
     while p is not None and re.match(allowed, p):
@@ -12,7 +11,6 @@ def _scan(first_char, chars, allowed):
 
 
 def _scan_string(delim, chars):
-    assert type(chars) is PeekableStream
     ret = ""
     while chars.next != delim:
         c = chars.move_next()
