@@ -2,7 +2,6 @@
 import re
 
 from cell.assert_implements import assert_implements
-from cell.valueclass import valueclass
 from cell.iterator import Iterator
 
 
@@ -59,93 +58,36 @@ def lex(chars):
     chars_p = PeekableStream(chars)
     while chars_p.peek is not None:
         c = chars_p.next()
-        if c == "(":
-            yield OpenBracketToken()
-        elif c == ")":
-            yield CloseBracketToken()
-        elif c == "{":
-            yield OpenBraceToken()
-        elif c == "}":
-            yield CloseBraceToken()
+        if c in "(){},;=:":
+            yield Token(c)
         elif c in " \n":
             pass
         elif c in ("'", '"'):
-            yield StringToken(_scan_string(c, chars_p))
-        elif c == ",":
-            yield CommaToken()
-        elif c == ";":
-            yield SemiColonToken()
-        elif c == "=":
-            yield EqualsToken()
-        elif c == ":":
-            yield ColonToken()
+            yield Token("string", _scan_string(c, chars_p))
         elif c in "+-*/":
-            yield ArithmeticToken(c)
+            yield Token("arithmetic", c)
         elif re.match("[.0-9]", c):
-            yield NumberToken(_scan(c, chars_p, "[.0-9]"))
+            yield Token("number", _scan(c, chars_p, "[.0-9]"))
         elif re.match("[_a-zA-Z]", c):
-            yield SymbolToken(_scan(c, chars_p, "[_a-zA-Z0-9]"))
+            yield Token("symbol", _scan(c, chars_p, "[_a-zA-Z0-9]"))
         elif c == "\t":
             raise Exception("Tab characters are not allowed in Cell")
         else:
             raise Exception("Unrecognised character: '" + c + "'.")
 
 
-@valueclass("value")
-class ArithmeticToken:
-    pass
+class Token:
 
+    def __init__(self, typ, value=None):
+        self.typ = typ
+        self.value = value
 
-@valueclass()
-class CloseBraceToken:
-    pass
+    def __eq__(self, other):
+        return (
+            type(self) == type(other)
+            and self.typ == other.typ
+            and self.value == other.value
+        )
 
-
-@valueclass()
-class CloseBracketToken:
-    pass
-
-
-@valueclass()
-class ColonToken:
-    pass
-
-
-@valueclass()
-class CommaToken:
-    pass
-
-
-@valueclass()
-class EqualsToken:
-    pass
-
-
-@valueclass("value")
-class NumberToken:
-    pass
-
-
-@valueclass()
-class OpenBraceToken:
-    pass
-
-
-@valueclass()
-class OpenBracketToken:
-    pass
-
-
-@valueclass()
-class SemiColonToken:
-    pass
-
-
-@valueclass("value")
-class StringToken:
-    pass
-
-
-@valueclass("name")
-class SymbolToken:
-    pass
+    def __repr__(self):
+        return "Token(%s, %s)" % (repr(self.typ), repr(self.value))

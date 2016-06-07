@@ -4,21 +4,7 @@ from tests.util.test import test
 from tests.util.system_test import system_test
 from tests.util.all_examples import all_examples
 
-from cell.lexer import (
-    lex,
-    ArithmeticToken,
-    CloseBraceToken,
-    CloseBracketToken,
-    ColonToken,
-    CommaToken,
-    EqualsToken,
-    NumberToken,
-    OpenBraceToken,
-    OpenBracketToken,
-    SemiColonToken,
-    StringToken,
-    SymbolToken
-)
+from cell.lexer import lex, Token
 
 # --- Utils ---
 
@@ -36,47 +22,47 @@ def Empty_file_produces_nothing():
 
 @test
 def Open_bracket_produces_open_bracket_token():
-    assert_that(lexed("("), equals([OpenBracketToken()]))
+    assert_that(lexed("("), equals([Token("(")]))
 
 
 @test
 def Close_bracket_produces_close_bracket_token():
-    assert_that(lexed(")"), equals([CloseBracketToken()]))
+    assert_that(lexed(")"), equals([Token(")")]))
 
 
 @test
 def Open_brace_produces_open_brace_token():
-    assert_that(lexed("{"), equals([OpenBraceToken()]))
+    assert_that(lexed("{"), equals([Token("{")]))
 
 
 @test
 def Close_brace_produces_close_brace_token():
-    assert_that(lexed("}"), equals([CloseBraceToken()]))
+    assert_that(lexed("}"), equals([Token("}")]))
 
 
 @test
 def Multiple_brackets_become_multiple_tokens():
     assert_that(
         lexed("()"),
-        equals([OpenBracketToken(), CloseBracketToken()])
+        equals([Token("("), Token(")")])
     )
 
 
 @test
 def Single_letter_becomes_a_symbol_token():
-    assert_that(lexed("a"), equals([SymbolToken("a")]))
+    assert_that(lexed("a"), equals([Token("symbol", "a")]))
 
 
 @test
 def Multiple_letters_become_a_symbol_token():
-    assert_that(lexed("foo"), equals([SymbolToken("foo")]))
+    assert_that(lexed("foo"), equals([Token("symbol", "foo")]))
 
 
 @test
 def A_symbol_followed_by_a_bracket_becomes_two_tokens():
     assert_that(
         lexed("foo("),
-        equals([SymbolToken("foo"), OpenBracketToken()])
+        equals([Token("symbol", "foo"), Token("(")])
     )
 
 
@@ -86,9 +72,9 @@ def Items_separated_by_spaces_become_separate_tokens():
         lexed("foo bar ( "),
         equals(
             [
-                SymbolToken("foo"),
-                SymbolToken("bar"),
-                OpenBracketToken()
+                Token("symbol", "foo"),
+                Token("symbol", "bar"),
+                Token("(")
             ]
         )
     )
@@ -100,8 +86,8 @@ def Items_separated_by_newlines_become_separate_tokens():
         lexed("foo\nbar"),
         equals(
             [
-                SymbolToken("foo"),
-                SymbolToken("bar")
+                Token("symbol", "foo"),
+                Token("symbol", "bar")
             ]
         )
     )
@@ -113,8 +99,8 @@ def Symbols_may_contain_numbers_and_underscores():
         lexed("foo2_bar ( "),
         equals(
             [
-                SymbolToken("foo2_bar"),
-                OpenBracketToken()
+                Token("symbol", "foo2_bar"),
+                Token("(")
             ]
         )
     )
@@ -126,8 +112,8 @@ def Symbols_may_start_with_underscores():
         lexed("_foo2_bar ( "),
         equals(
             [
-                SymbolToken("_foo2_bar"),
-                OpenBracketToken()
+                Token("symbol", "_foo2_bar"),
+                Token("(")
             ]
         )
     )
@@ -135,38 +121,38 @@ def Symbols_may_start_with_underscores():
 
 @test
 def Integers_are_parsed_into_number_tokens():
-    assert_that(lexed("128"), equals([NumberToken("128")]))
+    assert_that(lexed("128"), equals([Token("number", "128")]))
 
 
 @test
 def Floating_points_are_parsed_into_number_tokens():
-    assert_that(lexed("12.8"), equals([NumberToken("12.8")]))
+    assert_that(lexed("12.8"), equals([Token("number", "12.8")]))
 
 
 @test
 def Leading_decimal_point_produces_number_token():
-    assert_that(lexed(".812"), equals([NumberToken(".812")]))
+    assert_that(lexed(".812"), equals([Token("number", ".812")]))
 
 
 @test
 def Double_quoted_values_produce_string_tokens():
-    assert_that(lexed('"foo"'), equals([StringToken('foo')]))
+    assert_that(lexed('"foo"'), equals([Token("string", 'foo')]))
 
 
 @test
 def Single_quoted_values_produce_string_tokens():
-    assert_that(lexed("'foo'"), equals([StringToken('foo')]))
+    assert_that(lexed("'foo'"), equals([Token("string", 'foo')]))
 
 
 @test
 def Different_quote_types_allow_the_other_type_inside():
-    assert_that(lexed("'f\"oo'"), equals([StringToken('f"oo')]))
-    assert_that(lexed('"f\'oo"'), equals([StringToken("f'oo")]))
+    assert_that(lexed("'f\"oo'"), equals([Token("string", 'f"oo')]))
+    assert_that(lexed('"f\'oo"'), equals([Token("string", "f'oo")]))
 
 
 @test
 def Empty_quotes_produce_an_empty_string_token():
-    assert_that(lexed('""'), equals([StringToken('')]))
+    assert_that(lexed('""'), equals([Token("string", '')]))
 
 
 @test
@@ -180,30 +166,30 @@ def An_unfinished_string_is_an_error():
 
 @test
 def Commas_produce_comma_tokens():
-    assert_that(lexed(","), equals([CommaToken()]))
+    assert_that(lexed(","), equals([Token(",")]))
 
 
 @test
 def Equals_produces_an_equals_token():
-    assert_that(lexed("="), equals([EqualsToken()]))
+    assert_that(lexed("="), equals([Token("=")]))
 
 
 @test
 def Semicolons_produce_semicolon_tokens():
-    assert_that(lexed(";"), equals([SemiColonToken()]))
+    assert_that(lexed(";"), equals([Token(";")]))
 
 
 @test
 def Colons_produce_colon_tokens():
-    assert_that(lexed(":"), equals([ColonToken()]))
+    assert_that(lexed(":"), equals([Token(":")]))
 
 
 @test
 def Arithmetic_operators_produce_arithmetic_tokens():
-    assert_that(lexed("+"), equals([ArithmeticToken("+")]))
-    assert_that(lexed("-"), equals([ArithmeticToken("-")]))
-    assert_that(lexed("*"), equals([ArithmeticToken("*")]))
-    assert_that(lexed("/"), equals([ArithmeticToken("/")]))
+    assert_that(lexed("+"), equals([Token("arithmetic", "+")]))
+    assert_that(lexed("-"), equals([Token("arithmetic", "-")]))
+    assert_that(lexed("*"), equals([Token("arithmetic", "*")]))
+    assert_that(lexed("/"), equals([Token("arithmetic", "/")]))
 
 
 @test
@@ -212,17 +198,17 @@ def Multiple_token_types_can_be_combined():
         lexed('frobnicate( "Hello" + name, 4 / 5.0);'),
         equals(
             [
-                SymbolToken("frobnicate"),
-                OpenBracketToken(),
-                StringToken("Hello"),
-                ArithmeticToken("+"),
-                SymbolToken("name"),
-                CommaToken(),
-                NumberToken("4"),
-                ArithmeticToken("/"),
-                NumberToken("5.0"),
-                CloseBracketToken(),
-                SemiColonToken()
+                Token("symbol", "frobnicate"),
+                Token("("),
+                Token("string", "Hello"),
+                Token("arithmetic", "+"),
+                Token("symbol", "name"),
+                Token(","),
+                Token("number", "4"),
+                Token("arithmetic", "/"),
+                Token("number", "5.0"),
+                Token(")"),
+                Token(";")
             ]
         )
     )
@@ -275,9 +261,9 @@ def All_examples_lex():
 
 @test
 def Open_bracket_token_is_equal_to_open_bracket_token():
-    assert_that(OpenBracketToken(), equals(OpenBracketToken()))
+    assert_that(Token("("), equals(Token("(")))
 
 
 @test
 def Open_bracket_token_is_not_equal_to_something_else():
-    assert_that(OpenBracketToken(), is_not(CloseBracketToken()))
+    assert_that(Token("("), is_not(Token(")")))
