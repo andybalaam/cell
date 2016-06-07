@@ -5,7 +5,8 @@ from tests.util.test import test
 # from tests.util.all_examples import all_examples
 
 from cell.lexer import lex
-from cell.parser import parse, Assignment, Operation, Number, Symbol
+from cell.parser import (
+    parse, Assignment, Call, Operation, Number, String, Symbol)
 
 # --- Utils ---
 
@@ -75,14 +76,57 @@ def Variable_assignment_gets_parsed():
 
 
 @test
+def Function_call_with_no_args_gets_parsed():
+    assert_that(
+        parsed("print();"),
+        equals(
+            [
+                Call(Symbol("print"), [])
+            ]
+        )
+    )
+
+
+@test
+def Function_call_with_various_args_gets_parsed():
+    assert_that(
+        parsed("print( 'a', 3, 4 / 12 );"),
+        equals(
+            [
+                Call(
+                    Symbol("print"),
+                    [
+                        String("a"),
+                        Number("3"),
+                        Operation("/", Number("4"), Number("12"))
+                    ]
+                )
+            ]
+        )
+    )
+
+
+@test
 def Assigning_to_a_number_is_an_error():
     try:
-        parsed("3 = x;")
+        print(parsed("3 = x;"))
         fail("Should throw")
     except Exception as e:
         assert_that(
             str(e),
-            equals("Unexpected token after a number: ('=', '')")
+            equals("You can't assign to anything except a symbol.")
+        )
+
+
+@test
+def Assigning_to_an_expression_is_an_error():
+    try:
+        parsed("x(4) = 5;")
+        fail("Should throw")
+    except Exception as e:
+        assert_that(
+            str(e),
+            equals("You can't assign to anything except a symbol.")
         )
 
 
