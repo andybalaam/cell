@@ -1,8 +1,8 @@
 
 from tests.util.asserts import assert_that, equals, fail
 from tests.util.test import test
-# from tests.util.system_test import system_test
-# from tests.util.all_examples import all_examples
+from tests.util.system_test import system_test
+from tests.util.all_examples import all_examples
 
 from cell.lexer import lex
 from cell.parser import (
@@ -279,12 +279,34 @@ def Function_definition_with_params_and_commands_gets_parsed():
     )
 
 
+@test
+def A_complex_example_program_parses():
+    example = """
+        double =
+            {:(x)
+                2 * x;
+            };
+
+        num1 = 3;
+        num2 = double( num );
+
+        answer =
+            if( greater_than( num2, 5 ),
+                {"LARGE!"},
+                {"small."}
+            );
+
+        print( answer );
+    """
+    parsed(example)
+
+
 # --- Example programs ---
 
 
-# @system_test
-# def All_examples_parse():
-#     from cell.chars_in_file import chars_in_file
-#     for example in all_examples():
-#         with open(example, encoding="ascii") as f:
-#             parsed(chars_in_file(f))
+@system_test
+def All_examples_parse():
+    from cell.chars_in_file import chars_in_file
+    for example in all_examples():
+        with open(example, encoding="ascii") as f:
+            parsed(chars_in_file(f))
