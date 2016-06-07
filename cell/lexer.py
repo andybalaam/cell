@@ -1,71 +1,62 @@
-
 import re
 
-from cell.assert_implements import assert_implements
-from cell.iterator import Iterator
 
-
-def _scan(first_char, chars_p, allowed):
-    assert type(chars_p) is PeekableStream
+def _scan(first_char, chars, allowed):
+    assert type(chars) is PeekableStream
     ret = first_char
-    p = chars_p.peek
+    p = chars.next
     while p is not None and re.match(allowed, p):
-        ret += chars_p.next()
-        p = chars_p.peek
+        ret += chars.move_next()
+        p = chars.next
     return ret
 
 
-def _scan_string(delim, chars_p):
-    assert type(chars_p) is PeekableStream
+def _scan_string(delim, chars):
+    assert type(chars) is PeekableStream
     ret = ""
-    while chars_p.peek != delim:
-        c = chars_p.next()
+    while chars.next != delim:
+        c = chars.move_next()
         if c is None:
             raise Exception("A string ran off the end of the program!")
         ret += c
-    chars_p.next()
+    chars.move_next()
     return ret
 
 
 class PeekableStream:
-    """
-    Turns an iterator into something we can peek ahead one item of.
-    """
 
     def __init__(self, iterator):
-        assert_implements(iterator, Iterator)
         self.iterator = iter(iterator)
         self._fill()
 
     def _fill(self):
         try:
-            self.peek = self.iterator.__next__()
+            self.next = next(self.iterator)
         except StopIteration:
-            self.peek = None
+            self.next = None
 
-    def next(self):
-        ret = self.peek
+    def move_next(self):
+        ret = self.next
         self._fill()
         return ret
 
 
-def lex(chars):
-    assert_implements(chars, Iterator)
-    chars_p = PeekableStream(chars)
-    while chars_p.peek is not None:
-        c = chars_p.next()
+def lex(chars_iter):
+    chars = PeekableStream(chars_iter)
+    while chars.next is not None:
+        c = chars.move_next()
         if c in "(){},;=:":
             yield (c, "")
         elif c in " \n":
             pass
         elif c in ("'", '"'):
-            yield ("string", _scan_string(c, chars_p))
+            yield ("string", _scan_string(c, chars))
         elif c in "+-*/":
             yield ("arithmetic", c)
         elif re.match("[.0-9]", c):
-            yield ("number", _scan(c, chars_p, "[.0-9]"))
+            yield ("number", _scan(c, chars, "[.0-9]"))
         elif re.match("[_a-zA-Z]", c):
-            yield ("symbol", _scan(c, chars_p, "[_a-zA-Z0-9]"))
+            yield ("symbol", _scan(c, chars, "[_a-zA-Z0-9]"))
         elif c == "\t":
             raise Exception("Tab characters are not allowed in Cell")
         else:
