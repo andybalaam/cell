@@ -161,7 +161,7 @@ def An_unfinished_string_is_an_error():
         lexed('"foo')
         fail("Should throw")
     except Exception as e:
-        assert_that(str(e), equals("A string ran off the end of the program!"))
+        assert_that(str(e), equals("A string ran off the end of the program."))
 
 
 @test
@@ -242,7 +242,7 @@ def Tabs_are_an_error():
         lexed("aaa\tbbb")
         fail("Should throw")
     except Exception as e:
-        assert_that(str(e), equals("Tab characters are not allowed in Cell"))
+        assert_that(str(e), equals("Tab characters are not allowed in Cell."))
 
 
 # --- Example programs ---

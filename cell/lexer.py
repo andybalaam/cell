@@ -15,7 +15,7 @@ def _scan_string(delim, chars):
     while chars.next != delim:
         c = chars.move_next()
         if c is None:
-            raise Exception("A string ran off the end of the program!")
+            raise Exception("A string ran off the end of the program.")
         ret += c
     chars.move_next()
     return ret
@@ -52,6 +52,6 @@ def lex(chars_iter):
         elif re.match("[.0-9]", c): yield ("number", _scan(c, chars, "[.0-9]"))
         elif re.match(_stsym, c):   yield ("symbol", _scan(c, chars, _midsym))
         elif c == "\t":
-            raise Exception("Tab characters are not allowed in Cell")
+            raise Exception("Tab characters are not allowed in Cell.")
         else:
             raise Exception("Unrecognised character: '" + c + "'.")
