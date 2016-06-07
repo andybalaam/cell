@@ -1,5 +1,7 @@
 import re
 
+from cell.peekablestream import PeekableStream
+
 
 def _scan(first_char, chars, allowed):
     ret = first_char
@@ -20,23 +22,6 @@ def _scan_string(delim, chars):
     chars.move_next()
     return ret
 
-
-class PeekableStream:
-
-    def __init__(self, iterator):
-        self.iterator = iter(iterator)
-        self._fill()
-
-    def _fill(self):
-        try:
-            self.next = next(self.iterator)
-        except StopIteration:
-            self.next = None
-
-    def move_next(self):
-        ret = self.next
-        self._fill()
-        return ret
 
 _midsym = "[_a-zA-Z0-9]"
 _stsym = "[_a-zA-Z]"
