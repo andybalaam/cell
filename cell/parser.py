@@ -11,7 +11,7 @@ def _parse(first_token, tokens):
         typ2, val2 = next(tokens)
         if typ2 == ";":
             return Number(val)
-        elif typ2 == "arithmetic":
+        elif typ2 == "operation":
             return Operation(val2, Number(val), _parse(next(tokens), tokens))
     else:
         raise Exception("Unknown token type " + str(first_token))

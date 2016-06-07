@@ -47,7 +47,7 @@ def lex(chars_iter):
         c = chars.move_next()
         if c in " \n":              pass           # Ignore white space
         elif c in "(){},;=:":       yield (c, "")  # Special characters
-        elif c in "+-*/":           yield ("arithmetic", c)
+        elif c in "+-*/":           yield ("operation", c)
         elif c in ("'", '"'):       yield ("string", _scan_string(c, chars))
         elif re.match("[.0-9]", c): yield ("number", _scan(c, chars, "[.0-9]"))
         elif re.match(_stsym, c):   yield ("symbol", _scan(c, chars, _midsym))

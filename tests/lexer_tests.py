@@ -185,11 +185,11 @@ def Colons_produce_colon_tokens():
 
 
 @test
-def Arithmetic_operators_produce_arithmetic_tokens():
-    assert_that(lexed("+"), equals([("arithmetic", "+")]))
-    assert_that(lexed("-"), equals([("arithmetic", "-")]))
-    assert_that(lexed("*"), equals([("arithmetic", "*")]))
-    assert_that(lexed("/"), equals([("arithmetic", "/")]))
+def Arithmetic_operators_produce_operation_tokens():
+    assert_that(lexed("+"), equals([("operation", "+")]))
+    assert_that(lexed("-"), equals([("operation", "-")]))
+    assert_that(lexed("*"), equals([("operation", "*")]))
+    assert_that(lexed("/"), equals([("operation", "/")]))
 
 
 @test
@@ -201,11 +201,11 @@ def Multiple_token_types_can_be_combined():
                 ("symbol", "frobnicate"),
                 ("(", ""),
                 ("string", "Hello"),
-                ("arithmetic", "+"),
+                ("operation", "+"),
                 ("symbol", "name"),
                 (",", ""),
                 ("number", "4"),
-                ("arithmetic", "/"),
+                ("operation", "/"),
                 ("number", "5.0"),
                 (")", ""),
                 (";", "")
