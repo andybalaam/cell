@@ -1,11 +1,11 @@
 
-from tests.util.asserts import assert_that, equals
+from tests.util.asserts import assert_that, equals, fail
 from tests.util.test import test
 # from tests.util.system_test import system_test
 # from tests.util.all_examples import all_examples
 
 from cell.lexer import lex
-from cell.parser import parse, Assignment, Operation, Number
+from cell.parser import parse, Assignment, Operation, Number, Symbol
 
 # --- Utils ---
 
@@ -39,8 +39,51 @@ def Sum_of_numbers_is_parsed_as_expression():
 
 
 @test
+def Difference_of_symbol_and_number_is_parsed_as_expression():
+    assert_that(
+        parsed("foo - 44;"),
+        equals(
+            [
+                Operation("-", Symbol("foo"), Number("44"))
+            ]
+        )
+    )
+
+
+@test
+def Multiplication_of_symbols_is_parsed_as_expression():
+    assert_that(
+        parsed("foo * bar;"),
+        equals(
+            [
+                Operation("*", Symbol("foo"), Symbol("bar"))
+            ]
+        )
+    )
+
+
+@test
 def Variable_assignment_gets_parsed():
-    assert_that(parsed("x = 3;"), equals([Assignment("x", Number("3"))]))
+    assert_that(
+        parsed("x = 3;"),
+        equals(
+            [
+                Assignment(Symbol("x"), Number("3"))
+            ]
+        )
+    )
+
+
+@test
+def Assigning_to_a_number_is_an_error():
+    try:
+        parsed("3 = x;")
+        fail("Should throw")
+    except Exception as e:
+        assert_that(
+            str(e),
+            equals("Unexpected token after a number: ('=', '')")
+        )
 
 
 # --- Example programs ---
