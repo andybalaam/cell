@@ -194,6 +194,33 @@ def Missing_param_definition_with_colon_is_an_error():
 
 
 @test
+def Multiple_commands_parse_into_multiple_expressions():
+    program = """
+    x = 3;
+    func = {:(a) print(a);};
+    func(x);
+    """
+    assert_that(
+        parsed(program),
+        equals(
+            [
+                Assignment(Symbol('x'), Number('3')),
+                Assignment(
+                    Symbol('func'),
+                    Function(
+                        [Symbol('a')],
+                        [
+                            Call(Symbol('print'), [Symbol('a')])
+                        ]
+                    )
+                ),
+                Call(Symbol('func'), [Symbol('x')])
+            ]
+        )
+    )
+
+
+@test
 def Empty_function_definition_with_params_gets_parsed():
     assert_that(
         parsed("{:(aa, bb, cc, dd)};"),
