@@ -107,6 +107,45 @@ def Function_call_with_various_args_gets_parsed():
 
 
 @test
+def Multiple_function_calls_with_no_args_get_parsed():
+    assert_that(
+        parsed("print()();"),
+        equals(
+            [
+                Call(Call(Symbol("print"), []), [])
+            ]
+        )
+    )
+
+
+@test
+def Multiple_function_calls_with_various_args_get_parsed():
+    assert_that(
+        parsed("print( 'a', 3, 4 / 12 )(512)();"),
+        equals(
+            [
+                Call(
+                    Call(
+                        Call(
+                            Symbol("print"),
+                            [
+                                String("a"),
+                                Number("3"),
+                                Operation("/", Number("4"), Number("12"))
+                            ]
+                        ),
+                        [
+                            Number("512")
+                        ]
+                    ),
+                    []
+                )
+            ]
+        )
+    )
+
+
+@test
 def Assigning_to_a_number_is_an_error():
     try:
         print(parsed("3 = x;"))
