@@ -5,10 +5,6 @@ from cell.assert_implements import assert_implements
 from cell.iterator import Iterator
 
 
-def _is_number_or_decimal_point(c):
-    return c is not None and re.match("[.0-9]", c)
-
-
 def _scan(first_char, chars_p, allowed):
     assert type(chars_p) is PeekableStream
     ret = first_char
@@ -59,35 +55,18 @@ def lex(chars):
     while chars_p.peek is not None:
         c = chars_p.next()
         if c in "(){},;=:":
-            yield Token(c)
+            yield (c, "")
         elif c in " \n":
             pass
         elif c in ("'", '"'):
-            yield Token("string", _scan_string(c, chars_p))
+            yield ("string", _scan_string(c, chars_p))
         elif c in "+-*/":
-            yield Token("arithmetic", c)
+            yield ("arithmetic", c)
         elif re.match("[.0-9]", c):
-            yield Token("number", _scan(c, chars_p, "[.0-9]"))
+            yield ("number", _scan(c, chars_p, "[.0-9]"))
         elif re.match("[_a-zA-Z]", c):
-            yield Token("symbol", _scan(c, chars_p, "[_a-zA-Z0-9]"))
+            yield ("symbol", _scan(c, chars_p, "[_a-zA-Z0-9]"))
         elif c == "\t":
             raise Exception("Tab characters are not allowed in Cell")
         else:
             raise Exception("Unrecognised character: '" + c + "'.")
-
-
-class Token:
-
-    def __init__(self, typ, value=None):
-        self.typ = typ
-        self.value = value
-
-    def __eq__(self, other):
-        return (
-            type(self) == type(other)
-            and self.typ == other.typ
-            and self.value == other.value
-        )
-
-    def __repr__(self):
-        return "Token(%s, %s)" % (repr(self.typ), repr(self.value))
