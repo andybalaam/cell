@@ -6,7 +6,7 @@ from tests.util.test import test
 
 from cell.lexer import lex
 from cell.parser import (
-    parse, Assignment, Call, Operation, Number, String, Symbol)
+    parse, Assignment, Call, Function, Operation, Number, String, Symbol)
 
 # --- Utils ---
 
@@ -167,6 +167,116 @@ def Assigning_to_an_expression_is_an_error():
             str(e),
             equals("You can't assign to anything except a symbol.")
         )
+
+
+@test
+def Empty_function_definition_gets_parsed():
+    assert_that(
+        parsed("{};"),
+        equals(
+            [
+                Function([], [])
+            ]
+        )
+    )
+
+
+@test
+def Missing_param_definition_with_colon_is_an_error():
+    try:
+        parsed("{:print(x););")
+        fail("Should throw")
+    except Exception as e:
+        assert_that(
+            str(e),
+            equals("Colon must be followed by ( in a function definition.")
+        )
+
+
+@test
+def Empty_function_definition_with_params_gets_parsed():
+    assert_that(
+        parsed("{:(aa, bb, cc, dd)};"),
+        equals(
+            [
+                Function(
+                    [
+                        Symbol("aa"),
+                        Symbol("bb"),
+                        Symbol("cc"),
+                        Symbol("dd")
+                    ],
+                    []
+                )
+            ]
+        )
+    )
+
+
+@test
+def Function_params_that_are_not_symbols_is_an_error():
+    try:
+        parsed("{:(aa + 3, d)};"),
+        fail("Should throw")
+    except Exception as e:
+        assert_that(
+            str(e),
+            equals(
+                "Only symbols are allowed in function parameter lists. "
+                + "I found:('number', '3')."
+            )
+        )
+
+
+@test
+def Function_definition_containing_commands_gets_parsed():
+    assert_that(
+        parsed('{print(3-4); a = "x"; print(a);};'),
+        equals(
+            [
+                Function(
+                    [],
+                    [
+                        Call(
+                            Symbol('print'),
+                            [
+                                Operation('-', Number('3'), Number('4'))
+                            ]
+                        ),
+                        Assignment(Symbol('a'), String('x')),
+                        Call(Symbol('print'), [Symbol('a')])
+                    ]
+                )
+            ]
+        )
+    )
+
+
+@test
+def Function_definition_with_params_and_commands_gets_parsed():
+    assert_that(
+        parsed('{:(x,yy)print(3-4); a = "x"; print(a);};'),
+        equals(
+            [
+                Function(
+                    [
+                        Symbol("x"),
+                        Symbol("yy")
+                    ],
+                    [
+                        Call(
+                            Symbol('print'),
+                            [
+                                Operation('-', Number('3'), Number('4'))
+                            ]
+                        ),
+                        Assignment(Symbol('a'), String('x')),
+                        Call(Symbol('print'), [Symbol('a')])
+                    ]
+                )
+            ]
+        )
+    )
 
 
 # --- Example programs ---
