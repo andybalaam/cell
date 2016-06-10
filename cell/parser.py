@@ -32,9 +32,22 @@ class Parser:
         else:
             raise Exception("Unexpected token: " + str((typ, value)))
 
-    def fail_if_at_end(self, expected):
-        if self.tokens.next is None:
-            raise Exception("Hit end of file - expected '%s'." % expected)
+    def params(self):
+        if self.tokens.next[0] != ":":
+            return []
+        self.tokens.move_next()
+        typ = self.tokens.next[0]
+        if typ != "(":
+            raise Exception("':' must be followed by '(' in a function.")
+        self.tokens.move_next()
+        ret = self.multiple(",", ")")
+        for param in ret:
+            if param[0] != "symbol":
+                raise Exception(
+                    "Only symbols are allowed in function parameter lists."
+                    + " I found: " + str(param) + "."
+                )
+        return ret
 
     def multiple(self, sep, end):
         ret = []
@@ -53,22 +66,9 @@ class Parser:
                 self.fail_if_at_end(end)
         return ret
 
-    def params(self):
-        if self.tokens.next[0] != ":":
-            return []
-        self.tokens.move_next()
-        typ = self.tokens.next[0]
-        if typ != "(":
-            raise Exception("':' must be followed by '(' in a function.")
-        self.tokens.move_next()
-        ret = self.multiple(",", ")")
-        for param in ret:
-            if param[0] != "symbol":
-                raise Exception(
-                    "Only symbols are allowed in function parameter lists."
-                    + " I found: " + str(param) + "."
-                )
-        return ret
+    def fail_if_at_end(self, expected):
+        if self.tokens.next is None:
+            raise Exception("Hit end of file - expected '%s'." % expected)
 
 
 def parse(tokens_iterator):
