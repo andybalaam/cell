@@ -1,5 +1,5 @@
 
-from tests.util.asserts import assert_that, equals
+from tests.util.asserts import assert_that, equals, fail
 from tests.util.test import test
 # from tests.util.system_test import system_test
 # from tests.util.all_examples import all_examples
@@ -11,8 +11,13 @@ from cell.eval_ import eval_
 # --- Utils ---
 
 
+def env():
+    return {}
+
+
 def evald(inp):
-    return eval_(parse(lex(inp)))
+    return eval_(parse(lex(inp)), env())
+
 
 # --- Evaluating ---
 
@@ -35,6 +40,21 @@ def Arithmetic_expressions_come_out_correct():
     assert_that(evald("3 - 4;"), equals(("number", -1)))
     assert_that(evald("3 * 4;"), equals(("number", 12)))
     assert_that(evald("3 / 4;"), equals(("number", 0.75)))
+
+
+@test
+def Referring_to_an_unknown_symbol_is_an_error():
+    try:
+        evald("x;")
+        fail("Should throw")
+    except Exception as e:
+        assert_that(str(e), equals("Unknown symbol 'x'."))
+
+
+@test
+def Can_define_a_value_and_retrieve_it():
+    assert_that(evald("x = 30;x;"), equals(("number", 30)))
+    assert_that(evald("y = 'foo';y;"), equals(("string", "foo")))
 
 
 # --- Example programs ---
