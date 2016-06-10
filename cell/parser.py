@@ -1,6 +1,5 @@
 
 from cell.peekablestream import PeekableStream
-from cell.valueclass import valueclass
 
 
 def _parse_symbol(tokens):
@@ -11,7 +10,7 @@ def _parse_symbol(tokens):
 
     tokens.move_next()
     if typ == "symbol":
-        return Symbol(val)
+        return ("symbol", val)
     else:
         raise Exception(
             "Only symbols are allowed in function parameter lists."
@@ -93,34 +92,41 @@ def _parse(expr, tokens, stop_at):
         if expr is not None:
             raise Exception("You can't have a number after: " + str(expr))
         else:
-            return _parse(Number(val), tokens, stop_at)
+            return _parse(("number", val), tokens, stop_at)
     elif typ == "string":
         if expr is not None:
             raise Exception("You can't have a string after: " + str(expr))
         else:
-            return _parse(String(val), tokens, stop_at)
+            return _parse(("string", val), tokens, stop_at)
     elif typ == "symbol":
         if expr is not None:
             raise Exception("You can't have a symbol after: " + str(expr))
         else:
-            return _parse(Symbol(val), tokens, stop_at)
+            return _parse(("symbol", val), tokens, stop_at)
     elif typ == "operation":
         return _parse(
-            Operation(val, expr, _parse(None, tokens, stop_at)),
+            ("operation", val, expr, _parse(None, tokens, stop_at)),
             tokens,
             stop_at
         )
     elif typ == "(":
-        return _parse(Call(expr, _parse_args(tokens)), tokens, stop_at)
+        return _parse(("call", expr, _parse_args(tokens)), tokens, stop_at)
     elif typ == "{":
         params = _parse_params(tokens)
         commands = _parse_commands(tokens)
-        return _parse(Function(params, commands), tokens, stop_at)
+        return _parse(("function", params, commands), tokens, stop_at)
     elif typ == "=":
-        if type(expr) != Symbol:
+        if expr[0] != "symbol":
             raise Exception("You can't assign to anything except a symbol.")
         return _parse(
-            Assignment(expr, _parse(None, tokens, stop_at)), tokens, stop_at)
+            (
+                "assignment",
+                expr,
+                _parse(None, tokens, stop_at)
+            ),
+            tokens,
+            stop_at
+        )
     else:
         raise Exception("Unexpected token: " + str(token))
 
@@ -132,38 +138,3 @@ def parse(tokens_iterator):
         if p is not None:
             yield p
         tokens.move_next()
-
-
-@valueclass("name", "value")
-class Assignment:
-    pass
-
-
-@valueclass("function", "arguments")
-class Call:
-    pass
-
-
-@valueclass("parameters", "commands")
-class Function:
-    pass
-
-
-@valueclass("value")
-class Number:
-    pass
-
-
-@valueclass("operator", "value1", "value2")
-class Operation:
-    pass
-
-
-@valueclass("value")
-class String:
-    pass
-
-
-@valueclass("value")
-class Symbol:
-    pass

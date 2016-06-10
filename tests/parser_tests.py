@@ -5,8 +5,7 @@ from tests.util.system_test import system_test
 from tests.util.all_examples import all_examples
 
 from cell.lexer import lex
-from cell.parser import (
-    parse, Assignment, Call, Function, Operation, Number, String, Symbol)
+from cell.parser import parse
 
 # --- Utils ---
 
@@ -24,7 +23,7 @@ def Empty_file_produces_nothing():
 
 @test
 def Number_is_parsed_as_expression():
-    assert_that(parsed("56;"), equals([Number("56")]))
+    assert_that(parsed("56;"), equals([("number", "56")]))
 
 
 @test
@@ -33,7 +32,7 @@ def Sum_of_numbers_is_parsed_as_expression():
         parsed("32 + 44;"),
         equals(
             [
-                Operation("+", Number("32"), Number("44"))
+                ("operation", "+", ("number", "32"), ("number", "44"))
             ]
         )
     )
@@ -45,7 +44,7 @@ def Difference_of_symbol_and_number_is_parsed_as_expression():
         parsed("foo - 44;"),
         equals(
             [
-                Operation("-", Symbol("foo"), Number("44"))
+                ("operation", "-", ("symbol", "foo"), ("number", "44"))
             ]
         )
     )
@@ -57,7 +56,7 @@ def Multiplication_of_symbols_is_parsed_as_expression():
         parsed("foo * bar;"),
         equals(
             [
-                Operation("*", Symbol("foo"), Symbol("bar"))
+                ("operation", "*", ("symbol", "foo"), ("symbol", "bar"))
             ]
         )
     )
@@ -69,7 +68,7 @@ def Variable_assignment_gets_parsed():
         parsed("x = 3;"),
         equals(
             [
-                Assignment(Symbol("x"), Number("3"))
+                ("assignment", ("symbol", "x"), ("number", "3"))
             ]
         )
     )
@@ -81,7 +80,7 @@ def Function_call_with_no_args_gets_parsed():
         parsed("print();"),
         equals(
             [
-                Call(Symbol("print"), [])
+                ("call", ("symbol", "print"), [])
             ]
         )
     )
@@ -93,12 +92,13 @@ def Function_call_with_various_args_gets_parsed():
         parsed("print( 'a', 3, 4 / 12 );"),
         equals(
             [
-                Call(
-                    Symbol("print"),
+                (
+                    "call",
+                    ("symbol", "print"),
                     [
-                        String("a"),
-                        Number("3"),
-                        Operation("/", Number("4"), Number("12"))
+                        ("string", "a"),
+                        ("number", "3"),
+                        ("operation", "/", ("number", "4"), ("number", "12"))
                     ]
                 )
             ]
@@ -112,7 +112,7 @@ def Multiple_function_calls_with_no_args_get_parsed():
         parsed("print()();"),
         equals(
             [
-                Call(Call(Symbol("print"), []), [])
+                ("call", ("call", ("symbol", "print"), []), [])
             ]
         )
     )
@@ -124,18 +124,26 @@ def Multiple_function_calls_with_various_args_get_parsed():
         parsed("print( 'a', 3, 4 / 12 )(512)();"),
         equals(
             [
-                Call(
-                    Call(
-                        Call(
-                            Symbol("print"),
+                (
+                    "call",
+                    (
+                        "call",
+                        (
+                            "call",
+                            ("symbol", "print"),
                             [
-                                String("a"),
-                                Number("3"),
-                                Operation("/", Number("4"), Number("12"))
+                                ("string", "a"),
+                                ("number", "3"),
+                                (
+                                    "operation",
+                                    "/",
+                                    ("number", "4"),
+                                    ("number", "12")
+                                )
                             ]
                         ),
                         [
-                            Number("512")
+                            ("number", "512")
                         ]
                     ),
                     []
@@ -175,7 +183,7 @@ def Empty_function_definition_gets_parsed():
         parsed("{};"),
         equals(
             [
-                Function([], [])
+                ("function", [], [])
             ]
         )
     )
@@ -204,17 +212,19 @@ def Multiple_commands_parse_into_multiple_expressions():
         parsed(program),
         equals(
             [
-                Assignment(Symbol('x'), Number('3')),
-                Assignment(
-                    Symbol('func'),
-                    Function(
-                        [Symbol('a')],
+                ("assignment", ("symbol", 'x'), ("number", '3')),
+                (
+                    "assignment",
+                    ("symbol", 'func'),
+                    (
+                        "function",
+                        [("symbol", 'a')],
                         [
-                            Call(Symbol('print'), [Symbol('a')])
+                            ("call", ("symbol", 'print'), [("symbol", 'a')])
                         ]
                     )
                 ),
-                Call(Symbol('func'), [Symbol('x')])
+                ("call", ("symbol", 'func'), [("symbol", 'x')])
             ]
         )
     )
@@ -226,12 +236,13 @@ def Empty_function_definition_with_params_gets_parsed():
         parsed("{:(aa, bb, cc, dd)};"),
         equals(
             [
-                Function(
+                (
+                    "function",
                     [
-                        Symbol("aa"),
-                        Symbol("bb"),
-                        Symbol("cc"),
-                        Symbol("dd")
+                        ("symbol", "aa"),
+                        ("symbol", "bb"),
+                        ("symbol", "cc"),
+                        ("symbol", "dd")
                     ],
                     []
                 )
@@ -261,17 +272,24 @@ def Function_definition_containing_commands_gets_parsed():
         parsed('{print(3-4); a = "x"; print(a);};'),
         equals(
             [
-                Function(
+                (
+                    "function",
                     [],
                     [
-                        Call(
-                            Symbol('print'),
+                        (
+                            "call",
+                            ("symbol", 'print'),
                             [
-                                Operation('-', Number('3'), Number('4'))
+                                (
+                                    "operation",
+                                    '-',
+                                    ("number", '3'),
+                                    ("number", '4')
+                                )
                             ]
                         ),
-                        Assignment(Symbol('a'), String('x')),
-                        Call(Symbol('print'), [Symbol('a')])
+                        ("assignment", ("symbol", 'a'), ("string", 'x')),
+                        ("call", ("symbol", 'print'), [("symbol", 'a')])
                     ]
                 )
             ]
@@ -285,20 +303,27 @@ def Function_definition_with_params_and_commands_gets_parsed():
         parsed('{:(x,yy)print(3-4); a = "x"; print(a);};'),
         equals(
             [
-                Function(
+                (
+                    "function",
                     [
-                        Symbol("x"),
-                        Symbol("yy")
+                        ("symbol", "x"),
+                        ("symbol", "yy")
                     ],
                     [
-                        Call(
-                            Symbol('print'),
+                        (
+                            "call",
+                            ("symbol", 'print'),
                             [
-                                Operation('-', Number('3'), Number('4'))
+                                (
+                                    "operation",
+                                    '-',
+                                    ("number", '3'),
+                                    ("number", '4')
+                                )
                             ]
                         ),
-                        Assignment(Symbol('a'), String('x')),
-                        Call(Symbol('print'), [Symbol('a')])
+                        ("assignment", ("symbol", 'a'), ("string", 'x')),
+                        ("call", ("symbol", 'print'), [("symbol", 'a')])
                     ]
                 )
             ]
