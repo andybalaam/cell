@@ -18,11 +18,11 @@ class Parser:
             nxt = self.next_expression(None)
             return self.next_expression(("operation", value, prev, nxt))
         elif typ == "(":
-            args = self.multiple(",", ")")
+            args = self.multiple_expressions(",", ")")
             return self.next_expression(("call", prev, args))
         elif typ == "{":
-            params = self.params()
-            body = self.multiple(";", "}")
+            params = self.parameters_list()
+            body = self.multiple_expressions(";", "}")
             return self.next_expression(("function", params, body))
         elif typ == "=":
             if prev[0] != "symbol":
@@ -32,15 +32,15 @@ class Parser:
         else:
             raise Exception("Unexpected token: " + str((typ, value)))
 
-    def params(self):
+    def parameters_list(self):
         if self.tokens.next[0] != ":":
-            return []
+            return []  # If there's no colon, this function takes no args
         self.tokens.move_next()
         typ = self.tokens.next[0]
         if typ != "(":
             raise Exception("':' must be followed by '(' in a function.")
         self.tokens.move_next()
-        ret = self.multiple(",", ")")
+        ret = self.multiple_expressions(",", ")")
         for param in ret:
             if param[0] != "symbol":
                 raise Exception(
@@ -49,7 +49,7 @@ class Parser:
                 )
         return ret
 
-    def multiple(self, sep, end):
+    def multiple_expressions(self, sep, end):
         ret = []
         self.fail_if_at_end(end)
         typ = self.tokens.next[0]
