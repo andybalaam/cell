@@ -115,6 +115,8 @@ This is a smaller and simpler set of expressions than in most languages*.  The
 main reason Cell needs so few expression types is because it uses functions to
 provide abilities that would usually be provided by specialised expressions.
 
+*Except Lisp.
+
 For example, in Cell, the `if` function replaces what would normally be a
 specific `if-then-else` statement or expression type.  Cell can express this as
 a function because the "then" parts are passed as arguments which are actually
