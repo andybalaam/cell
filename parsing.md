@@ -88,7 +88,7 @@ Because we can have nested expressions like:
 
     print( 3 * half_of( 14 ) );
 
-The trees the parser sends back can have other trees nested inside them.  In
+the trees the parser sends back can have other trees nested inside them.  In
 this case the parser will see `print(` and start trying to build a function
 call expression, but it won't actually be able to send it back until it has
 built sub-trees to represent the `half_of(` function call, and then inserted
