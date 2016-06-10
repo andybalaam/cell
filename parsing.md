@@ -74,7 +74,7 @@ and after parsing, that becomes something like:
 
 The parser works through tokens one by one until it recognises what type of
 expression it is dealing with.  This is not immediately clear straight away.
-For example, if it sees a token `("symbol", "x"), it could be the start of a
+For example, if it sees a token `("symbol", "x")`, it could be the start of a
 simple mathematical expression like `x + 3`, or it could be the start of an
 assignment statement like `x = 12`.
 
