@@ -5,7 +5,7 @@ stream of tokens (coming from the [lexer](lexing.md)) into tree-like structures
 that reflect the expressions that are allowed in the language.
 
 
-You can fine Cell's parser at:
+You can find Cell's parser at:
 https://github.com/andybalaam/cell/blob/master/cell/parser.py
 and the tests for it at:
 https://github.com/andybalaam/cell/blob/master/tests/parser_tests.py
