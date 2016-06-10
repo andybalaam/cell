@@ -23,9 +23,6 @@ def _scan_string(delim, chars):
     return ret
 
 
-_midsym = "[_a-zA-Z0-9]"
-_stsym = "[_a-zA-Z]"
-
 def lex(chars_iter):
     chars = PeekableStream(chars_iter)
     while chars.next is not None:
@@ -35,7 +32,8 @@ def lex(chars_iter):
         elif c in "+-*/":           yield ("operation", c)
         elif c in ("'", '"'):       yield ("string", _scan_string(c, chars))
         elif re.match("[.0-9]", c): yield ("number", _scan(c, chars, "[.0-9]"))
-        elif re.match(_stsym, c):   yield ("symbol", _scan(c, chars, _midsym))
+        elif re.match("[_a-zA-Z]", c):
+            yield ("symbol", _scan(c, chars, "[_a-zA-Z0-9]"))
         elif c == "\t":
             raise Exception("Tab characters are not allowed in Cell.")
         else:
