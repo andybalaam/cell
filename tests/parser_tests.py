@@ -261,7 +261,8 @@ def Function_params_that_are_not_symbols_is_an_error():
             str(e),
             equals(
                 "Only symbols are allowed in function parameter lists. "
-                + "I found:('number', '3')."
+                + "I found: "
+                + "('operation', '+', ('symbol', 'aa'), ('number', '3'))."
             )
         )
 
