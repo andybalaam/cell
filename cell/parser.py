@@ -7,28 +7,28 @@ class Parser:
         self.tokens = tokens
         self.stop_at = stop_at
 
-    def parse(self, prev):
+    def next_expression(self, prev):
         typ, value = self.tokens.next
         if typ in self.stop_at:
             return prev
         self.tokens.move_next()
         if typ in ("number", "string", "symbol") and prev is None:
-            return self.parse((typ, value))
+            return self.next_expression((typ, value))
         elif typ == "operation":
-            nxt = self.parse(None)
-            return self.parse(("operation", value, prev, nxt))
+            nxt = self.next_expression(None)
+            return self.next_expression(("operation", value, prev, nxt))
         elif typ == "(":
             args = self.multiple(",", ")")
-            return self.parse(("call", prev, args))
+            return self.next_expression(("call", prev, args))
         elif typ == "{":
             params = self.params()
             body = self.multiple(";", "}")
-            return self.parse(("function", params, body))
+            return self.next_expression(("function", params, body))
         elif typ == "=":
             if prev[0] != "symbol":
                 raise Exception("You can't assign to anything except a symbol.")
-            nxt = self.parse(None)
-            return self.parse(("assignment", prev, nxt))
+            nxt = self.next_expression(None)
+            return self.next_expression(("assignment", prev, nxt))
         else:
             raise Exception("Unexpected token: " + str((typ, value)))
 
@@ -58,7 +58,7 @@ class Parser:
         else:
             arg_parser = Parser(self.tokens, (sep, end))
             while typ != end:
-                p = arg_parser.parse(None)
+                p = arg_parser.next_expression(None)
                 if p is not None:
                     ret.append(p)
                 typ = self.tokens.next[0]
@@ -74,7 +74,7 @@ class Parser:
 def parse(tokens_iterator):
     parser = Parser(PeekableStream(tokens_iterator), ";")
     while parser.tokens.next is not None:
-        p = parser.parse(None)
+        p = parser.next_expression(None)
         if p is not None:
             yield p
         parser.tokens.move_next()
