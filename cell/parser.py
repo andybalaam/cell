@@ -88,29 +88,14 @@ def _parse(expr, tokens, stop_at):
         return expr
 
     tokens.move_next()
-    if typ == "number":
-        if expr is not None:
-            raise Exception("You can't have a number after: " + str(expr))
-        else:
-            return _parse(("number", val), tokens, stop_at)
-    elif typ == "string":
-        if expr is not None:
-            raise Exception("You can't have a string after: " + str(expr))
-        else:
-            return _parse(("string", val), tokens, stop_at)
-    elif typ == "symbol":
-        if expr is not None:
-            raise Exception("You can't have a symbol after: " + str(expr))
-        else:
-            return _parse(("symbol", val), tokens, stop_at)
+    if typ in ("number", "string", "symbol") and expr is None:
+        return _parse((typ, val), tokens, stop_at)
     elif typ == "operation":
-        return _parse(
-            ("operation", val, expr, _parse(None, tokens, stop_at)),
-            tokens,
-            stop_at
-        )
+        nxt = _parse(None, tokens, stop_at)
+        return _parse(("operation", val, expr, nxt), tokens, stop_at)
     elif typ == "(":
-        return _parse(("call", expr, _parse_args(tokens)), tokens, stop_at)
+        args = _parse_args(tokens)
+        return _parse(("call", expr, args), tokens, stop_at)
     elif typ == "{":
         params = _parse_params(tokens)
         commands = _parse_commands(tokens)
@@ -118,15 +103,8 @@ def _parse(expr, tokens, stop_at):
     elif typ == "=":
         if expr[0] != "symbol":
             raise Exception("You can't assign to anything except a symbol.")
-        return _parse(
-            (
-                "assignment",
-                expr,
-                _parse(None, tokens, stop_at)
-            ),
-            tokens,
-            stop_at
-        )
+        nxt = _parse(None, tokens, stop_at)
+        return _parse(("assignment", expr, nxt), tokens, stop_at)
     else:
         raise Exception("Unexpected token: " + str(token))
 
