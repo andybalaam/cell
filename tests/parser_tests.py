@@ -27,6 +27,15 @@ def Number_is_parsed_as_expression():
 
 
 @test
+def Missing_semicolon_is_an_error():
+    try:
+        parsed("56")
+        fail("Should throw")
+    except Exception as e:
+        assert_that(str(e), equals("Hit end of file - expected ';'."))
+
+
+@test
 def Sum_of_numbers_is_parsed_as_expression():
     assert_that(
         parsed("32 + 44;"),

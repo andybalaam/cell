@@ -8,6 +8,7 @@ class Parser:
         self.stop_at = stop_at
 
     def next_expression(self, prev):
+        self.fail_if_at_end(";")
         typ, value = self.tokens.next
         if typ in self.stop_at:
             return prev
