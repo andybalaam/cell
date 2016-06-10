@@ -197,7 +197,7 @@ def Missing_param_definition_with_colon_is_an_error():
     except Exception as e:
         assert_that(
             str(e),
-            equals("Colon must be followed by ( in a function definition.")
+            equals("':' must be followed by '(' in a function.")
         )
 
 
