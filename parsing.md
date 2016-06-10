@@ -80,7 +80,7 @@ assignment statement like `x = 12`.
 
 So the parser waits until it is sure what type of expression it is dealing
 with, then gathers the other parts it needs (for example if it has received
-`myfunction(` as two tokens `("symbol", "myfunction") and ("(",), and then it
+`myfunction(` as two tokens `("symbol", "myfunction")` and `("(",)`, and then it
 knows this is a function call, so it reads in the list of arguments before
 gathering them up and sending back a function call expression.
 
