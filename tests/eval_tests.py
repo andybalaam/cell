@@ -18,9 +18,9 @@ def evald(inp, env=None):
     return eval_(parse(lex(inp)), env)
 
 
-def assert_fails(program, error):
+def assert_fails(program, error, env=None):
     try:
-        evald(program)
+        evald(program, env)
         fail("Should throw")
     except Exception as e:
         assert_that(str(e), equals(error))
@@ -143,12 +143,32 @@ def Wrong_number_of_arguments_to_a_function_is_an_error():
         "1 arguments passed to function, but it requires 0 arguments."
     )
     assert_fails(
-        "x={:(a, b, c)}(3, 2);",
+        "x={:(a, b, c)}; x(3, 2);",
         "2 arguments passed to function, but it requires 3 arguments."
     )
 
 
-# Wrong_number_of_arguments_to_a_native_function_is_an_error
+@test
+def Wrong_number_of_arguments_to_a_native_function_is_an_error():
+    def native_fn0():
+        return ("number", 12)
+    def native_fn3(x, y, z):
+        return ("number", 12)
+    env = Env()
+    env.set("native_fn0", ("native", native_fn0))
+    env.set("native_fn3", ("native", native_fn3))
+    assert_fails(
+        "native_fn0(3);",
+        "1 arguments passed to function, but it requires 0 arguments.",
+        env
+    )
+    assert_fails(
+        "native_fn3(3, 2);",
+        "2 arguments passed to function, but it requires 3 arguments.",
+        env
+    )
+
+
 # A_native_function_can_edit_the_environment
 # A_closure_holds_updateable_values
 

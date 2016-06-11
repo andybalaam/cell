@@ -1,3 +1,5 @@
+import inspect
+
 from cell.env import Env
 
 
@@ -16,22 +18,29 @@ def _operation(expr, env):
         raise Exception("Unknown operation: " + expr[1])
 
 
+def fail_if_wrong_number_of_args(params, args):
+    if len(params) != len(args):
+        raise Exception((
+            "%d arguments passed to function, but it "
+            + "requires %d arguments."
+        ) % (len(args), len(params)))
+
+
 def _function_call(expr, env):
     fn = _single_expression(expr[1], env)
     args = list((_single_expression(a, env) for a in expr[2]))
     if fn[0] == "function":
         params = fn[1]
-        if len(params) != len(args):
-            raise Exception((
-                "%d arguments passed to function, but it "
-                + "requires %d arguments."
-            ) % (len(args), len(params)))
+        fail_if_wrong_number_of_args(params, args)
         body = fn[2]
         new_env = Env(env)
         for p, a in zip(params, args):
             new_env.set(p[1], a)
         return eval_(body, new_env)
     elif fn[0] == "native":
+        py_fn = fn[1]
+        params = inspect.getargspec(py_fn).args
+        fail_if_wrong_number_of_args(params, args)
         return fn[1](*args)
     else:
         assert False
