@@ -108,7 +108,7 @@ def A_symbol_has_different_life_inside_and_outside_a_function():
 #             };
 #
 #         num1 = 3;
-#         num2 = double( num );
+#         num2 = double( num1 );
 #
 #         answer =
 #             if( greater_than( num2, 5 ),
@@ -116,11 +116,11 @@ def A_symbol_has_different_life_inside_and_outside_a_function():
 #                 {"small."}
 #             );
 #
-#         print( answer );
+#         answer;
 #     """
-#     parsed(example)
-#
-#
+#     assert_that(evald(example), equals(("string", "LARGE!")))
+
+
 # @system_test
 # def All_examples_evaluate():
 #     from cell.chars_in_file import chars_in_file
