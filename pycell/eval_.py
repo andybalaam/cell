@@ -4,8 +4,8 @@ from pycell.env import Env
 
 
 def _operation(expr, env):
-    arg1 = _single_expression(expr[2], env)
-    arg2 = _single_expression(expr[3], env)
+    arg1 = eval_expr(expr[2], env)
+    arg2 = eval_expr(expr[3], env)
     if expr[1] == "+":
         return ("number", arg1[1] + arg2[1])
     elif expr[1] == "-":
@@ -27,8 +27,8 @@ def fail_if_wrong_number_of_args(params, args):
 
 
 def _function_call(expr, env):
-    fn = _single_expression(expr[1], env)
-    args = list((_single_expression(a, env) for a in expr[2]))
+    fn = eval_expr(expr[1], env)
+    args = list((eval_expr(a, env) for a in expr[2]))
     if fn[0] == "function":
         params = fn[1]
         fail_if_wrong_number_of_args(params, args)
@@ -36,7 +36,7 @@ def _function_call(expr, env):
         new_env = fn[3]
         for p, a in zip(params, args):
             new_env.set(p[1], a)
-        return eval_(body, new_env)
+        return eval_list(body, new_env)
     elif fn[0] == "native":
         py_fn = fn[1]
         params = inspect.getargspec(py_fn).args
@@ -46,7 +46,7 @@ def _function_call(expr, env):
         assert False
 
 
-def _single_expression(expr, env):
+def eval_expr(expr, env):
     typ = expr[0]
     if typ == "number":
         return ("number", float(expr[1]))
@@ -63,7 +63,7 @@ def _single_expression(expr, env):
             return ret
     elif typ == "assignment":
         var_name = expr[1][1]
-        env.set(var_name, _single_expression(expr[2], env))
+        env.set(var_name, eval_expr(expr[2], env))
     elif typ == "call":
         return _function_call(expr, env)
     elif typ == "function":
@@ -72,8 +72,13 @@ def _single_expression(expr, env):
         raise Exception("Unknown expression type: " + str(expr))
 
 
-def eval_(exprs, env):
-    ret = ("none",)
+def eval_iter(exprs, env):
     for expr in exprs:
-        ret = _single_expression(expr, env)
+        yield eval_expr(expr, env)
+
+
+def eval_list(exprs, env):
+    ret = ("none",)
+    for expr in eval_iter(exprs, env):
+        ret = expr
     return ret

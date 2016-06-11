@@ -6,7 +6,7 @@ from tests.util.test import test
 
 from pycell.lexer import lex
 from pycell.parser import parse
-from pycell.eval_ import eval_
+from pycell.eval_ import eval_expr, eval_iter, eval_list
 from pycell.env import Env
 
 # --- Utils ---
@@ -15,7 +15,7 @@ from pycell.env import Env
 def evald(inp, env=None):
     if env is None:
         env = Env()
-    return eval_(parse(lex(inp)), env)
+    return eval_list(parse(lex(inp)), env)
 
 
 def assert_fails(program, error, env=None):
@@ -190,7 +190,7 @@ def A_closure_holds_updateable_values():
             ret = then_fn
         else:
             ret = else_fn
-        return eval_((("call", ret, []),), env)
+        return eval_expr(("call", ret, []), env)
     env = Env()
     env.set("dumb_set", ("native", dumb_set))
     env.set("dumb_if_equal", ("native", dumb_if_equal))
