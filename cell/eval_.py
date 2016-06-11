@@ -33,7 +33,7 @@ def _function_call(expr, env):
         params = fn[1]
         fail_if_wrong_number_of_args(params, args)
         body = fn[2]
-        new_env = Env(env)
+        new_env = fn[3]
         for p, a in zip(params, args):
             new_env.set(p[1], a)
         return eval_(body, new_env)
@@ -67,7 +67,7 @@ def _single_expression(expr, env):
     elif typ == "call":
         return _function_call(expr, env)
     elif typ == "function":
-        return expr
+        return ("function", expr[1], expr[2], Env(env))
     else:
         raise Exception("Unknown expression type: " + str(expr))
 

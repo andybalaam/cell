@@ -181,7 +181,39 @@ def A_native_function_can_edit_the_environment():
     )
 
 
-# A_closure_holds_updateable_values
+@test
+def A_closure_holds_updateable_values():
+    def dumb_set(env, sym, val):
+        env.parent.set(sym[1], val)
+    def dumb_if_equal(env, val1, val2, then_fn, else_fn):
+        if val1 == val2:
+            ret = then_fn
+        else:
+            ret = else_fn
+        return eval_((("call", ret, []),), env)
+    env = Env()
+    env.set("dumb_set", ("native", dumb_set))
+    env.set("dumb_if_equal", ("native", dumb_if_equal))
+    assert_that(
+        evald(
+            """
+            counter = {
+                x = 0;
+                {:(meth)
+                    dumb_if_equal(meth, "get",
+                        {x;},
+                        {dumb_set("x", x + 1);}
+                    );
+                }
+            }();
+            counter("inc");
+            counter("inc");
+            counter("get");
+            """,
+            env
+        ),
+        equals(("number", 2))
+    )
 
 
 # --- Example programs ---
