@@ -17,7 +17,7 @@ def _operation(expr, env):
 
 
 def _function_call(expr, env):
-    fn = expr[1]
+    fn = _single_expression(expr[1], env)
     args = expr[2]
     params = fn[1]
     body = fn[2]
@@ -48,7 +48,7 @@ def _single_expression(expr, env):
     elif typ == "call":
         return _function_call(expr, env)
     elif typ == "function":
-        pass
+        return expr
     else:
         raise Exception("Unknown expression type: " + str(expr))
 

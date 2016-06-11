@@ -71,6 +71,17 @@ def Body_of_a_function_can_use_arg_values():
 
 
 @test
+def Can_hold_a_reference_to_a_function_and_call_it():
+    assert_that(
+        evald("""
+        add = {:(x, y) x + y;};
+        add(20, 2.2);
+        """),
+        equals(("number", 22.2))
+    )
+
+
+@test
 def A_symbol_has_different_life_inside_and_outside_a_function():
     """Define a symbol outside a function, redefine inside,
        then evaluate outside.  What happened inside the
