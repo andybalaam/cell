@@ -22,7 +22,7 @@ def all_modules_in(pkg):
 def all_tests_in(mod):
     return (
         (mod.__name__ + "." + name, fn) for name, fn
-            in mod.__dict__.items() if isinstance(fn, TestFunctionType)
+        in mod.__dict__.items() if isinstance(fn, TestFunctionType)
     )
 
 

@@ -7,16 +7,13 @@ from tests.util.test import test
 from cell.lexer import lex
 from cell.parser import parse
 from cell.eval_ import eval_
+from cell.env import Env
 
 # --- Utils ---
 
 
-def env():
-    return {}
-
-
 def evald(inp):
-    return eval_(parse(lex(inp)), env())
+    return eval_(parse(lex(inp)), Env())
 
 
 # --- Evaluating ---
@@ -55,6 +52,38 @@ def Referring_to_an_unknown_symbol_is_an_error():
 def Can_define_a_value_and_retrieve_it():
     assert_that(evald("x = 30;x;"), equals(("number", 30)))
     assert_that(evald("y = 'foo';y;"), equals(("string", "foo")))
+
+
+@test
+def Calling_a_function_returns_its_last_value():
+    assert_that(
+        evald("{10;11;}();"),
+        equals(("number", 11))
+    )
+
+
+@test
+def Body_of_a_function_can_use_arg_values():
+    assert_that(
+        evald("{:(x, y) x + y;}(100, 1);"),
+        equals(("number", 101))
+    )
+
+
+@test
+def A_symbol_has_different_life_inside_and_outside_a_function():
+    """Define a symbol outside a function, redefine inside,
+       then evaluate outside.  What happened inside the
+       function should not affect the value outside."""
+
+    assert_that(
+        evald("""
+            foo = "bar";
+            {foo = 3;}();
+            foo;
+        """),
+        equals(("string", "bar"))
+    )
 
 
 # --- Example programs ---
