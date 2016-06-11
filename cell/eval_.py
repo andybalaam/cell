@@ -40,8 +40,8 @@ def _function_call(expr, env):
     elif fn[0] == "native":
         py_fn = fn[1]
         params = inspect.getargspec(py_fn).args
-        fail_if_wrong_number_of_args(params, args)
-        return fn[1](*args)
+        fail_if_wrong_number_of_args(params[1:], args)
+        return fn[1](env, *args)
     else:
         assert False
 

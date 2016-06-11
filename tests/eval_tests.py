@@ -129,7 +129,7 @@ def A_symbol_within_a_function_has_the_local_value():
 
 @test
 def Native_function_gets_called():
-    def native_fn(x, y):
+    def native_fn(env, x, y):
         return ("number", x[1] + y[1])
     env = Env()
     env.set("native_fn", ("native", native_fn))
@@ -150,9 +150,9 @@ def Wrong_number_of_arguments_to_a_function_is_an_error():
 
 @test
 def Wrong_number_of_arguments_to_a_native_function_is_an_error():
-    def native_fn0():
+    def native_fn0(env):
         return ("number", 12)
-    def native_fn3(x, y, z):
+    def native_fn3(env, x, y, z):
         return ("number", 12)
     env = Env()
     env.set("native_fn0", ("native", native_fn0))
@@ -169,7 +169,18 @@ def Wrong_number_of_arguments_to_a_native_function_is_an_error():
     )
 
 
-# A_native_function_can_edit_the_environment
+@test
+def A_native_function_can_edit_the_environment():
+    def mx3(env):
+        env.set("x", ("number", 3))
+    env = Env()
+    env.set("make_x_three", ("native", mx3))
+    assert_that(
+        evald("x=1;make_x_three();x;", env),
+        equals(("number", 3))
+    )
+
+
 # A_closure_holds_updateable_values
 
 
