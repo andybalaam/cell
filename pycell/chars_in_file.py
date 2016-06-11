@@ -1,5 +1,5 @@
-from cell.assert_implements import assert_implements
-from cell.readable import Readable
+from pycell.assert_implements import assert_implements
+from pycell.readable import Readable
 
 
 def chars_in_file(f):

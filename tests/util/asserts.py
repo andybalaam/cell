@@ -1,5 +1,5 @@
 
-from cell.assert_implements import assert_implements
+from pycell.assert_implements import assert_implements
 from tests.util.matcher import Matcher
 
 # Inspired by Hamcrest

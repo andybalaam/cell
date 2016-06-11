@@ -4,10 +4,10 @@ from tests.util.test import test
 # from tests.util.system_test import system_test
 # from tests.util.all_examples import all_examples
 
-from cell.lexer import lex
-from cell.parser import parse
-from cell.eval_ import eval_
-from cell.env import Env
+from pycell.lexer import lex
+from pycell.parser import parse
+from pycell.eval_ import eval_
+from pycell.env import Env
 
 # --- Utils ---
 
@@ -242,7 +242,7 @@ def A_closure_holds_updateable_values():
 
 # @system_test
 # def All_examples_evaluate():
-#     from cell.chars_in_file import chars_in_file
+#     from pycell.chars_in_file import chars_in_file
 #     for example in all_examples():
 #         with open(example, encoding="ascii") as f:
 #             parsed(chars_in_file(f))

@@ -1,5 +1,5 @@
 
-from cell.peekablestream import PeekableStream
+from pycell.peekablestream import PeekableStream
 
 
 class Parser:

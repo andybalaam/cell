@@ -1,6 +1,6 @@
 import re
 
-from cell.peekablestream import PeekableStream
+from pycell.peekablestream import PeekableStream
 
 
 def _scan(first_char, chars, allowed):

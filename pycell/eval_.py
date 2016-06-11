@@ -1,6 +1,6 @@
 import inspect
 
-from cell.env import Env
+from pycell.env import Env
 
 
 def _operation(expr, env):

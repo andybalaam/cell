@@ -4,8 +4,8 @@ from tests.util.test import test
 from tests.util.system_test import system_test
 from tests.util.all_examples import all_examples
 
-from cell.lexer import lex
-from cell.parser import parse
+from pycell.lexer import lex
+from pycell.parser import parse
 
 # --- Utils ---
 
@@ -368,7 +368,7 @@ def A_complex_example_program_parses():
 
 @system_test
 def All_examples_parse():
-    from cell.chars_in_file import chars_in_file
+    from pycell.chars_in_file import chars_in_file
     for example in all_examples():
         with open(example, encoding="ascii") as f:
             parsed(chars_in_file(f))

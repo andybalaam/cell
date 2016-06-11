@@ -4,7 +4,7 @@ from tests.util.test import test
 from tests.util.system_test import system_test
 from tests.util.all_examples import all_examples
 
-from cell.lexer import lex
+from pycell.lexer import lex
 
 # --- Utils ---
 
@@ -250,7 +250,7 @@ def Tabs_are_an_error():
 
 @system_test
 def All_examples_lex():
-    from cell.chars_in_file import chars_in_file
+    from pycell.chars_in_file import chars_in_file
     for example in all_examples():
         with open(example, encoding="ascii") as f:
             lexed(chars_in_file(f))
