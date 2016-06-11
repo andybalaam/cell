@@ -12,8 +12,10 @@ from cell.env import Env
 # --- Utils ---
 
 
-def evald(inp):
-    return eval_(parse(lex(inp)), Env())
+def evald(inp, env=None):
+    if env is None:
+        env = Env()
+    return eval_(parse(lex(inp)), env)
 
 
 # --- Evaluating ---
@@ -107,6 +109,27 @@ def A_symbol_within_a_function_has_the_local_value():
         """),
         equals(("number", 77))
     )
+
+
+@test
+def A_symbol_within_a_function_has_the_local_value():
+    assert_that(
+        evald("""
+            foo = 3;
+            bar = {foo = 77;foo;}();
+            bar;
+        """),
+        equals(("number", 77))
+    )
+
+
+@test
+def Native_function_gets_called():
+    def native_fn(x, y):
+        return ("number", x[1] + y[1])
+    env = Env()
+    env.set("native_fn", ("native", native_fn))
+    assert_that(evald("native_fn( 2, 8 );", env), equals(("number", 10)))
 
 
 # --- Example programs ---

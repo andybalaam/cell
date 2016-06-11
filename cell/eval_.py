@@ -18,13 +18,18 @@ def _operation(expr, env):
 
 def _function_call(expr, env):
     fn = _single_expression(expr[1], env)
-    args = expr[2]
-    params = fn[1]
-    body = fn[2]
-    new_env = Env(env)
-    for p, a in zip(params, args):
-        new_env.set(p[1], _single_expression(a, env))
-    return eval_(body, new_env)
+    args = (_single_expression(a, env) for a in expr[2])
+    if fn[0] == "function":
+        params = fn[1]
+        body = fn[2]
+        new_env = Env(env)
+        for p, a in zip(params, args):
+            new_env.set(p[1], a)
+        return eval_(body, new_env)
+    elif fn[0] == "native":
+        return fn[1](*args)
+    else:
+        assert False
 
 
 def _single_expression(expr, env):
