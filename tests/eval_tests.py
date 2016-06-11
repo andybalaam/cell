@@ -18,6 +18,14 @@ def evald(inp, env=None):
     return eval_(parse(lex(inp)), env)
 
 
+def assert_fails(program, error):
+    try:
+        evald(program)
+        fail("Should throw")
+    except Exception as e:
+        assert_that(str(e), equals(error))
+
+
 # --- Evaluating ---
 
 
@@ -43,11 +51,7 @@ def Arithmetic_expressions_come_out_correct():
 
 @test
 def Referring_to_an_unknown_symbol_is_an_error():
-    try:
-        evald("x;")
-        fail("Should throw")
-    except Exception as e:
-        assert_that(str(e), equals("Unknown symbol 'x'."))
+    assert_fails("x;", "Unknown symbol 'x'.")
 
 
 @test
@@ -131,13 +135,6 @@ def Native_function_gets_called():
     env.set("native_fn", ("native", native_fn))
     assert_that(evald("native_fn( 2, 8 );", env), equals(("number", 10)))
 
-
-def assert_fails(program, error):
-    try:
-        evald(program)
-        fail("Should throw")
-    except Exception as e:
-        assert_that(str(e), equals(error))
 
 @test
 def Wrong_number_of_arguments_to_a_function_is_an_error():
