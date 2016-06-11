@@ -97,6 +97,18 @@ def A_symbol_has_different_life_inside_and_outside_a_function():
     )
 
 
+@test
+def A_symbol_within_a_function_has_the_local_value():
+    assert_that(
+        evald("""
+            foo = 3;
+            bar = {foo = 77;foo;}();
+            bar;
+        """),
+        equals(("number", 77))
+    )
+
+
 # --- Example programs ---
 
 # @test
