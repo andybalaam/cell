@@ -132,6 +132,30 @@ def Native_function_gets_called():
     assert_that(evald("native_fn( 2, 8 );", env), equals(("number", 10)))
 
 
+def assert_fails(program, error):
+    try:
+        evald(program)
+        fail("Should throw")
+    except Exception as e:
+        assert_that(str(e), equals(error))
+
+@test
+def Wrong_number_of_arguments_to_a_function_is_an_error():
+    assert_fails(
+        "{}(3);",
+        "1 arguments passed to function, but it requires 0 arguments."
+    )
+    assert_fails(
+        "x={:(a, b, c)}(3, 2);",
+        "2 arguments passed to function, but it requires 3 arguments."
+    )
+
+
+# Wrong_number_of_arguments_to_a_native_function_is_an_error
+# A_native_function_can_edit_the_environment
+# A_closure_holds_updateable_values
+
+
 # --- Example programs ---
 
 # @test

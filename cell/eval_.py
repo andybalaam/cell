@@ -18,9 +18,14 @@ def _operation(expr, env):
 
 def _function_call(expr, env):
     fn = _single_expression(expr[1], env)
-    args = (_single_expression(a, env) for a in expr[2])
+    args = list((_single_expression(a, env) for a in expr[2]))
     if fn[0] == "function":
         params = fn[1]
+        if len(params) != len(args):
+            raise Exception((
+                "%d arguments passed to function, but it "
+                + "requires %d arguments."
+            ) % (len(args), len(params)))
         body = fn[2]
         new_env = Env(env)
         for p, a in zip(params, args):
