@@ -63,7 +63,9 @@ def eval_expr(expr, env):
             return ret
     elif typ == "assignment":
         var_name = expr[1][1]
-        env.set(var_name, eval_expr(expr[2], env))
+        val = eval_expr(expr[2], env)
+        env.set(var_name, val)
+        return val
     elif typ == "call":
         return _function_call(expr, env)
     elif typ == "function":

@@ -61,6 +61,11 @@ def Can_define_a_value_and_retrieve_it():
 
 
 @test
+def Value_of_an_assignment_is_the_value_assigned():
+    assert_that(evald("x = 31;"), equals(("number", 31)))
+
+
+@test
 def Calling_a_function_returns_its_last_value():
     assert_that(
         evald("{10;11;}();"),
