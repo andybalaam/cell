@@ -1,0 +1,12 @@
+#!/usr/bin/env python3
+
+import sys
+
+from pycell.repl import repl
+
+def main(argv, stdin, stdout, stderr):
+    repl(stdin, stdout, stderr)
+    return 0
+
+if __name__ == "__main__":
+    sys.exit(main(sys.argv, sys.stdin, sys.stdout, sys.stderr))
