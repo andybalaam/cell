@@ -61,6 +61,5 @@ def repl(stdin, stdout, stderr):
         except Exception as e:
             stderr.write(str(e))
             stderr.write("\n")
-            raise e
     stdout.write("\n")
     stdout.flush()
