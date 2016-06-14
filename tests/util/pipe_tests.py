@@ -42,3 +42,21 @@ def Can_read_in_one_thread_and_write_in_another():
         x = pipe.read(len(str(i))+1)
         assert_that(x, equals(str(i)+"\n"))
     thread1.join()
+
+@test
+def Readline_reads_up_to_a_newline():
+    pipe = Pipe()
+    pipe.write("ab")
+    pipe.write("c\nd")
+    pipe.write("e")
+    pipe.write("\nghi")
+    pipe.close()
+    assert_that(pipe.readline(), equals("abc\n"))
+    assert_that(pipe.readline(), equals("de\n"))
+    assert_that(pipe.readline(), equals("ghi"))
+
+@test
+def Pipe_may_be_flushed():
+    pipe = Pipe()
+    pipe.write("x")
+    pipe.flush()

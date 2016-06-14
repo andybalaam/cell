@@ -21,10 +21,23 @@ class Pipe:
     def read(self, size=None):
         ret = ""
         while size is None or len(ret) < size:
-            ret += self.buffer.get()
+            if self.buffer.empty() and self.closed:
+                break
+            ret += self.buffer.get(timeout=0.1)
+        return ret
+
+    def readline(self):
+        ret = ""
+        c = "x"
+        while c not in ("\n", ""):
+            c = self.buffer.get(timeout=0.1)
+            ret += c
             if self.buffer.empty() and self.closed:
                 break
         return ret
+
+    def flush(self):
+        pass
 
     def close(self):
         self.closed = True
