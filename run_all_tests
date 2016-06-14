@@ -29,10 +29,13 @@ def all_tests_in(mod):
 count = 0
 for modpath in all_modules_in("tests"):
     mod = importlib.import_module(modpath)
-    for (name, test) in all_tests_in(mod):
-        print("  " + name)
-        test()
-        count += 1
+    tests = list(all_tests_in(mod))
+    if len(tests) > 0:
+        print("  %s .. " % mod.__name__, end="")
+        for (name, test) in tests:
+            test()
+        print("%d tests passed" % len(tests))
+        count += len(tests)
 
 if count == 0:
     raise AssertionError("No tests were found!")
