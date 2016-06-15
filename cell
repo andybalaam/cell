@@ -3,10 +3,16 @@
 import sys
 
 from pycell.repl import repl
+from pycell.run import run
+
 
 def main(argv, stdin, stdout, stderr):
-    repl(stdin, stdout, stderr)
+    if len(argv) == 1:
+        repl(stdin, stdout, stderr)
+    else:
+        run(argv, stdin, stdout, stderr)
     return 0
+
 
 if __name__ == "__main__":
     sys.exit(main(sys.argv, sys.stdin, sys.stdout, sys.stderr))
