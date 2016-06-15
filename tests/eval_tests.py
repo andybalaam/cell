@@ -1,5 +1,5 @@
 
-from tests.util.asserts import assert_that, equals, fail
+from tests.util.asserts import assert_that, assert_fails, equals, fail
 from tests.util.test import test
 # from tests.util.system_test import system_test
 # from tests.util.all_examples import all_examples
@@ -18,12 +18,8 @@ def evald(inp, env=None):
     return eval_list(parse(lex(inp)), env)
 
 
-def assert_fails(program, error, env=None):
-    try:
-        evald(program, env)
-        fail("Should throw")
-    except Exception as e:
-        assert_that(str(e), equals(error))
+def assert_prog_fails(program, error, env=None):
+    assert_fails(error, evald, program, env)
 
 
 # --- Evaluating ---
@@ -51,7 +47,7 @@ def Arithmetic_expressions_come_out_correct():
 
 @test
 def Referring_to_an_unknown_symbol_is_an_error():
-    assert_fails("x;", "Unknown symbol 'x'.")
+    assert_prog_fails("x;", "Unknown symbol 'x'.")
 
 
 @test
@@ -143,11 +139,11 @@ def Native_function_gets_called():
 
 @test
 def Wrong_number_of_arguments_to_a_function_is_an_error():
-    assert_fails(
+    assert_prog_fails(
         "{}(3);",
         "1 arguments passed to function, but it requires 0 arguments."
     )
-    assert_fails(
+    assert_prog_fails(
         "x={:(a, b, c)}; x(3, 2);",
         "2 arguments passed to function, but it requires 3 arguments."
     )
@@ -162,12 +158,12 @@ def Wrong_number_of_arguments_to_a_native_function_is_an_error():
     env = Env()
     env.set("native_fn0", ("native", native_fn0))
     env.set("native_fn3", ("native", native_fn3))
-    assert_fails(
+    assert_prog_fails(
         "native_fn0(3);",
         "1 arguments passed to function, but it requires 0 arguments.",
         env
     )
-    assert_fails(
+    assert_prog_fails(
         "native_fn3(3, 2);",
         "2 arguments passed to function, but it requires 3 arguments.",
         env

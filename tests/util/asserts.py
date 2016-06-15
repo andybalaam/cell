@@ -12,6 +12,14 @@ def assert_that(obj, matcher):
         raise AssertionError(matcher.description())
 
 
+def assert_fails(error, fn, *args):
+    try:
+        fn(*args)
+        fail("Should throw")
+    except Exception as e:
+        assert_that(str(e), equals(error))
+
+
 def equals(expected):
     class EqualsMatcher:
 
