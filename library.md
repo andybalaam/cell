@@ -39,3 +39,11 @@ of the other arguments (which are functions) it is going to call.
 It then creates a tree structure representing calling that function with no
 arguments, and finally evaluates the function call expression it has created
 and returns the result.  `eval_expr` is a function provided by the Evaluator.
+
+We couldn't implement if in Cell directly, since we would need to be able
+to say "if" in some way to be able to do it.
+
+Another example of a native function is Cell is `set`, which goes and finds
+a name in the environment where it was defined, and changes the value stored
+for it.  This needs to be done natively because Cell programs can't
+manipulate the environment directly.
