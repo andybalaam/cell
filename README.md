@@ -85,7 +85,7 @@ coming soon, but see Lisp's `cons` etc. for the general idea.)
 
 ## Explanations
 
-Cell is designed to be useful to teach people how to write programming languages, so the source code is intentionally short and hopefully reasonably easy to read.
+Cell is designed to be useful to teach people how to write programming languages, so the source code is intentionally short and hopefully reasonably easy to read.  To get started, follow the links below for explanations of the main parts.
 
 An in interpreter, the program flows through several layers, starting off as textual source code, and being transformed by each layer.
 
