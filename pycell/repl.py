@@ -50,7 +50,7 @@ class Prompt:
 
 
 def repl(stdin, stdout, stderr):
-    env = Env()
+    env = Env(parent=None, stdin=stdin, stdout=stdout, stderr=stderr)
     while True:
         try:
             p = Prompt(stdout)

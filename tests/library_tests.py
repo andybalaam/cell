@@ -1,4 +1,6 @@
 
+from io import StringIO
+
 from tests.util.asserts import assert_that, assert_fails, equals, fail
 from tests.util.test import test
 
@@ -13,8 +15,8 @@ import pycell.library
 # --- Utils
 
 
-def evald(inp):
-    env = Env()
+def evald(inp, stdout=None):
+    env = Env(stdout=stdout)
     pycell.library.import_(env)
     return eval_list(parse(lex(inp)), env)
 
@@ -78,3 +80,10 @@ def Functions_are_not_equal_even_if_the_same():
         evald('if(equals({3;}, {3;}), {4;}, {5;});'),
         equals(evald("5;"))
     )
+
+
+@test
+def Print_prints_to_stdout():
+    stdout = StringIO()
+    evald('print("foo");', stdout=stdout)
+    assert_that(stdout.getvalue(), equals("foo\n"))
