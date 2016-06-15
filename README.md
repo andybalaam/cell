@@ -83,7 +83,17 @@ program with no arguments:
 Cell provides more complex data structures using functions.  (More info
 coming soon, but see Lisp's `cons` etc. for the general idea.)
 
-## Details
+## Explanations
 
-mycode.cell --> [Lexing](lexing.md) --> [Parsing](parsing.md) --> [Evaluation](evaluation.md) --> [Library](library.md) -> Behaviour
+Cell is designed to be useful to teach people how to write programming languages, so the source code is intentionally short and hopefully reasonably easy to read.
+
+An in interpreter, the program flows through several layers, starting off as textual source code, and being transformed by each layer.
+
+The first layer is the [Lexer](lexing.md), which reads in text characters, and spits out "tokens" like `print`, or `{`.
+
+The second layer is the [Parser](parsing.md), which reads in tokens, and spits out tree-structures which it does not understand.
+
+The third layer is the [Evaluator](evaluation.md), which reads in the tree structures, understands them and "runs" them - turns them into concrete values by looking up symbols, calling functions, and obeying rules (e.g. the rules of arithmetic).
+
+While the Evaluator is running, it has access to the [Library](library.md), which is a set of standard values and functions that all programs can use.
 
