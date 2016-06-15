@@ -42,13 +42,17 @@ can only be seen from the right place.
 
 For example:
 
-    x = "World!";
-    myfn = {
-        x = "Hello, ";
-        print( x );
-    };
-    myfn();
+<!-- include "examples/hello_then_world.cell" -->
+```
+x = "World!";
+myfn = {
+    x = "Hello, ";
     print( x );
+};
+myfn();
+print( x );
+```
+<!-- end_include -->
 
 should print "Hello, " and then "World!".  If the evaluator messes up the
 scoping rules, it will print "Hello, " twice, because the changed value of `x`
@@ -60,16 +64,20 @@ expected, but in Cell there is no leakage.
 More complicated than that is the idea of closures, where the scope of a
 function can follow it around, so that this program:
 
-    outerfn = {
-        x = 12;
-        innerfn = {
-            print(x);
-        };
-        innerfn;
+<!-- include "examples/outer_inner.cell" -->
+```
+outerfn = {
+    x = 12;
+    innerfn = {
+        print(x);
     };
+    innerfn;
+};
 
-    thing = outerfn();
-    thing();
+thing = outerfn();
+thing();
+```
+<!-- end_include -->
 
 should print "12", because the `x` defined inside `outerfn` has been carried
 around with `innerfn`.  Here, `outerfn` is a function that returns another

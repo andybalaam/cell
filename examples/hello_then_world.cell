@@ -1,0 +1,7 @@
+x = "World!";
+myfn = {
+    x = "Hello, ";
+    print( x );
+};
+myfn();
+print( x );

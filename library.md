@@ -6,9 +6,13 @@ and doing as much as possible using functions.
 For example, an `if` "statement" in Cell is not a statement at all, but is
 actually a call to a function called `if`:
 
-    y = 3;
-    x = if( equals( y, 3 ), "yes!", "no." );
-    print( x );
+<!-- include "examples/libif.cell" -->
+```
+y = 3;
+x = if( equals( y, 3 ), {"yes!";}, {"no.";} );
+print( x );
+```
+<!-- end_include -->
 
 This program will print "yes!", because the `if` function returns its second
 argument if its first argument is true.

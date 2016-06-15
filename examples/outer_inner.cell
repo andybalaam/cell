@@ -1,0 +1,10 @@
+outerfn = {
+    x = 12;
+    innerfn = {
+        print(x);
+    };
+    innerfn;
+};
+
+thing = outerfn();
+thing();
