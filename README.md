@@ -56,6 +56,5 @@ coming soon, but see Lisp's `cons` etc. for the general idea.)
 
 ## Details
 
-* [Lexing](lexing.md)
-* [Parsing](parsing.md)
+mycode.cell --> [Lexing](lexing.md) --> [Parsing](parsing.md) --> [Evaluation](evaluation.md) --> [Library](library.md) -> Behaviour
 
