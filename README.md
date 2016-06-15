@@ -31,6 +31,17 @@ num1 does not equal num2.
 ```
 <!-- end_include -->
 
+## Install
+
+```
+sudo apt-get install python3
+git clone git@github.com:andybalaam/cell.git
+cd cell
+./cell                  # - to run the interactive environment
+./cell filename.cell    # - to run a program
+make                    # - to run all the tests
+```
+
 ## Design Principles
 
 Cell is designed to be as complete a programming language as possible, while
@@ -51,7 +62,7 @@ That's about it.
 
 ## Interacting with Cell
 
-Cell has an interactive environment which can be launched by running the Cell
+Cell has an interactive environment ("REPL") which can be launched by running the Cell
 program with no arguments:
 
 <!-- include "examples/www.cellsession" -->
