@@ -1,16 +1,13 @@
 
-from tests.util.asserts import assert_that, assert_fails, equals, fail
+from tests.util.asserts import assert_that, assert_fails, equals
 from tests.util.test import test
-# from tests.util.system_test import system_test
-# from tests.util.all_examples import all_examples
 
 from pycell.lexer import lex
 from pycell.parser import parse
-from pycell.eval_ import eval_expr, eval_iter, eval_list
+from pycell.eval_ import eval_expr, eval_list
 from pycell.env import Env
 
 # --- Utils ---
-
 
 def evald(inp, env=None):
     if env is None:
@@ -117,18 +114,6 @@ def A_symbol_within_a_function_has_the_local_value():
 
 
 @test
-def A_symbol_within_a_function_has_the_local_value():
-    assert_that(
-        evald("""
-            foo = 3;
-            bar = {foo = 77;foo;}();
-            bar;
-        """),
-        equals(("number", 77))
-    )
-
-
-@test
 def Native_function_gets_called():
     def native_fn(env, x, y):
         return ("number", x[1] + y[1])
@@ -153,6 +138,7 @@ def Wrong_number_of_arguments_to_a_function_is_an_error():
 def Wrong_number_of_arguments_to_a_native_function_is_an_error():
     def native_fn0(env):
         return ("number", 12)
+
     def native_fn3(env, x, y, z):
         return ("number", 12)
     env = Env()
@@ -186,6 +172,7 @@ def A_native_function_can_edit_the_environment():
 def A_closure_holds_updateable_values():
     def dumb_set(env, sym, val):
         env.parent.set(sym[1], val)
+
     def dumb_if_equal(env, val1, val2, then_fn, else_fn):
         if val1 == val2:
             ret = then_fn
@@ -215,36 +202,3 @@ def A_closure_holds_updateable_values():
         ),
         equals(("number", 2))
     )
-
-
-# --- Example programs ---
-
-# @test
-# def A_complex_example_program_evaluates_correctly():
-#     example = """
-#         double =
-#             {:(x)
-#                 2 * x;
-#             };
-#
-#         num1 = 3;
-#         num2 = double( num1 );
-#
-#         answer =
-#             if( greater_than( num2, 5 ),
-#                 {"LARGE!"},
-#                 {"small."}
-#             );
-#
-#         answer;
-#     """
-#     assert_that(evald(example), equals(("string", "LARGE!")))
-
-
-# @system_test
-# def All_examples_evaluate():
-#     from pycell.chars_in_file import chars_in_file
-#     for example in all_examples():
-#         with open(example, encoding="ascii") as f:
-#             parsed(chars_in_file(f))
-#             TODO: check the output is correct

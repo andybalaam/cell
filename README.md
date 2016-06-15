@@ -12,7 +12,7 @@ square = {:(x) x * x;};
 num1 = 3;
 num2 = square( num1 );
 
-if( equal( num1, num2 ),
+if( equals( num1, num2 ),
     {
         print( "num1 equals num2." );
     },
@@ -48,6 +48,24 @@ Cell has:
 * Functions
 
 That's about it.
+
+## Interacting with Cell
+
+Cell has an interactive environment which can be launched by running the Cell
+program with no arguments:
+
+<!-- include "examples/www.cellsession" -->
+```
+>>> 137 + 349;
+486
+>>> 5/10;
+0.5
+>>> 21 + 35 + 12 + 7;
+75
+>>> if(equals(0, 1), {"illogical";}, {"logical";});
+'logical'
+```
+<!-- end_include -->
 
 ## Building a language
 

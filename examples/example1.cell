@@ -3,7 +3,7 @@ square = {:(x) x * x;};
 num1 = 3;
 num2 = square( num1 );
 
-if( equal( num1, num2 ),
+if( equals( num1, num2 ),
     {
         print( "num1 equals num2." );
     },
