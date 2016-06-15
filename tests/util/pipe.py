@@ -26,20 +26,28 @@ class Pipe:
 
     def read(self, size=None):
         ret = ""
+        count = 0
         while size is None or len(ret) < size:
             if self.buffer.empty() and self.closed:
                 break
+            if count > 50:
+                raise Exception("Timed out waiting for read that never ended.")
+            count += 1
             ret += self.buffer.get(timeout=0.1)
         return ret
 
     def readline(self):
         ret = ""
+        count = 0
         c = "x"
         while c not in ("\n", ""):
-            c = self.buffer.get(timeout=0.1)
-            ret += c
             if self.buffer.empty() and self.closed:
                 break
+            if count > 50:
+                raise Exception("Timed out waiting for read that never ended.")
+            count += 1
+            c = self.buffer.get(timeout=0.1)
+            ret += c
         return ret
 
     def flush(self):

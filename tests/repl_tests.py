@@ -9,8 +9,8 @@ from tests.util.all_examples import all_sessions
 
 
 def _validate_line(exp_line, strin, strout):
-    expprompt = exp_line[:4]
-    if expprompt in (">>> ", "... "):
+    expprompt = exp_line[:3]
+    if expprompt in (">>>", "..."):
         prompt = strout.read(4)
         if prompt != exp_line[:4]:
             raise Exception(

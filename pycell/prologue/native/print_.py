@@ -12,6 +12,8 @@ def _strvalue(value):
         return "<function>"
     elif typ == "native":
         return "<native function>"
+    elif typ == "none":
+        return "None"
     else:
         raise Exception("Unknown value type '%s'" % typ)
 

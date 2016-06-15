@@ -1,4 +1,6 @@
 
+import pycell.library
+
 from pycell.chars_in_file import chars_in_file
 from pycell.env import Env
 from pycell.eval_ import eval_iter
@@ -19,6 +21,8 @@ def stringify(value):
         return "<function>"
     elif typ == "native":
         return "<native function>"
+    elif typ == "none":
+        return "None"
     else:
         raise Exception("Unknown value type '%s'" % typ)
 
@@ -51,6 +55,7 @@ class Prompt:
 
 def repl(stdin, stdout, stderr):
     env = Env(parent=None, stdin=stdin, stdout=stdout, stderr=stderr)
+    pycell.library.import_(env)
     while True:
         try:
             p = Prompt(stdout)
