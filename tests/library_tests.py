@@ -46,3 +46,35 @@ def Call_if_with_a_nonnumber_is_an_error():
         evald,
         'if("x", {}, {});'
     )
+
+
+@test
+def Equals_returns_true_for_identical_numbers():
+    assert_that(
+        evald('if(equals(1, 1), {4;}, {5;});'),
+        equals(evald("4;"))
+    )
+
+
+@test
+def Equals_returns_false_for_different_numbers():
+    assert_that(
+        evald('if(equals(1, 2), {4;}, {5;});'),
+        equals(evald("5;"))
+    )
+
+
+@test
+def Equals_returns_false_for_different_types():
+    assert_that(
+        evald('if(equals(1, "1"), {4;}, {5;});'),
+        equals(evald("5;"))
+    )
+
+
+@test
+def Functions_are_not_equal_even_if_the_same():
+    assert_that(
+        evald('if(equals({3;}, {3;}), {4;}, {5;});'),
+        equals(evald("5;"))
+    )
