@@ -1,8 +1,5 @@
 # Cell Elementary Learning Language
 
-Note: Cell is currently unfinished.  The documentation below describes the
-language as it will be when it is complete.
-
 Cell is a minimally simple programming language designed to demonstrate how to
 write a programming language.
 
