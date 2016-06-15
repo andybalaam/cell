@@ -1,14 +1,13 @@
 
 from io import StringIO
 
-from tests.util.asserts import assert_that, assert_fails, equals, fail
+from tests.util.asserts import assert_that, assert_fails, equals
 from tests.util.test import test
 
 from pycell.env import Env
 from pycell.eval_ import eval_list
 from pycell.lexer import lex
 from pycell.parser import parse
-from pycell.prologue.native.if_ import if_
 
 import pycell.library
 
@@ -44,7 +43,7 @@ def if_calls_else_if_first_argument_is_zero():
 def Call_if_with_a_nonnumber_is_an_error():
     assert_fails(
         "Only numbers may be passed to an if, but I was passed "
-            + "'('string', 'x')'",
+        + "'('string', 'x')'",
         evald,
         'if("x", {}, {});'
     )
@@ -87,3 +86,9 @@ def Print_prints_to_stdout():
     stdout = StringIO()
     evald('print("foo");', stdout=stdout)
     assert_that(stdout.getvalue(), equals("foo\n"))
+
+
+@test
+def Print_returns_None():
+    stdout = StringIO()
+    assert_that(evald('print("foo");', stdout=stdout), equals(("none",)))

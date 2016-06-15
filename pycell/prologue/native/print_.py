@@ -15,5 +15,7 @@ def _strvalue(value):
     else:
         raise Exception("Unknown value type '%s'" % typ)
 
+
 def print_(env, value):
     env.stdout.write("%s\n" % _strvalue(value))
+    return ("none",)
