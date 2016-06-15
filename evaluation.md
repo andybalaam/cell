@@ -18,7 +18,7 @@ https://github.com/andybalaam/cell/blob/master/tests/eval_tests.py
 
 For example, if we have a piece of code like this:
 
-3 + 4;
+    3 + 4;
 
 which has been parsed into a tree like this:
 
@@ -31,7 +31,7 @@ which has been parsed into a tree like this:
 
 then the evaluator will do the calculation, and return a value like this:
 
-   ("number", 7)
+    ("number", 7)
 
 Notice that the `7` is no longer in quotes - the evaluator first evaluated the
 two tree nodes and converted them from unprocessed text ("3" and "4") into
