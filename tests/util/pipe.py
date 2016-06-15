@@ -24,6 +24,9 @@ class Pipe:
         for ch in s:
             self.buffer.put(ch)
 
+    def pending(self):
+        return not self.buffer.empty()
+
     def read(self, size=None):
         ret = ""
         count = 0

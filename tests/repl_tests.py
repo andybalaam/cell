@@ -8,7 +8,7 @@ from tests.util.system_test import system_test
 from tests.util.all_examples import all_sessions
 
 
-def _validate_line(exp_line, strin, strout):
+def _validate_line(exp_line, strin, strout, strerr):
     expprompt = exp_line[:3]
     if expprompt in (">>>", "..."):
         prompt = strout.read(4)
@@ -27,11 +27,12 @@ def _validate_line(exp_line, strin, strout):
 
 
 def _validate_session(f):
-    with Pipe() as strin, Pipe() as strout, Pipe() as strerr:
-        replthread = Thread(target=repl, args=(strin, strout, strerr))
+    with Pipe() as strin, Pipe() as strout:
+        replthread = Thread(target=repl, args=(strin, strout, strout))
         replthread.start()
         for exp_line in f:
-            _validate_line(exp_line, strin, strout)
+            _validate_line(exp_line, strin, strout, strout)
+
     replthread.join()
 
 

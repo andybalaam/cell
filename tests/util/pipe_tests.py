@@ -75,3 +75,18 @@ def Pipe_may_be_used_as_a_context_manager():
         with Pipe() as p2:
             p1.write("x")
             p2.flush()
+
+
+@test
+def Pipe_can_tell_you_whether_it_has_output_pending():
+    with Pipe() as p1:
+        assert_that(p1.pending(), equals(False))
+        p1.write("xxx")
+        assert_that(p1.pending(), equals(True))
+        p1.read(3)
+        assert_that(p1.pending(), equals(False))
+        p1.write("xx")
+        p1.close()
+        assert_that(p1.pending(), equals(True))
+        p1.read()
+        assert_that(p1.pending(), equals(False))
