@@ -165,7 +165,7 @@ def Multiple_function_calls_with_various_args_get_parsed():
 @test
 def Assigning_to_a_number_is_an_error():
     try:
-        print(parsed("3 = x;"))
+        parsed("3 = x;")
         fail("Should throw")
     except Exception as e:
         assert_that(
