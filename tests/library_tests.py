@@ -108,3 +108,32 @@ def Print_prints_to_stdout():
 def Print_returns_None():
     stdout = StringIO()
     assert_that(evald('print("foo");', stdout=stdout), equals(("none",)))
+
+
+@test
+def Set_changes_value_of_symbol():
+    assert_that(evald('x = 3; set("x", 4); x;'), equals(evald('4;')))
+
+
+@test
+def Set_changes_value_of_symbol_in_outer_scope():
+    assert_that(evald(
+        """
+        foo = "bar";
+        fn = {
+            set("foo", "baz");
+        };
+        fn();
+        foo;
+        """),
+        equals(evald('"baz";'))
+    )
+
+@test
+def Calling_set_with_nonstring_is_an_error():
+    assert_fails(
+        "set() takes a string as its first argument, but was: "
+        + "('number', 3.0)",
+        evald,
+        "x = 3; set(x, 4);"
+    )

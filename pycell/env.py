@@ -27,6 +27,9 @@ class Env:
     def set(self, name, value):
         self.items[name] = value
 
+    def contains(self, name):
+        return name in self.items
+
     def __str__(self):
         ret = ""
         for k, v in self.items.items():
