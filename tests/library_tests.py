@@ -66,6 +66,22 @@ def Equals_returns_false_for_different_numbers():
 
 
 @test
+def Equals_returns_true_for_identical_strings():
+    assert_that(
+        evald('if(equals("foo", "foo"), {4;}, {5;});'),
+        equals(evald("4;"))
+    )
+
+
+@test
+def Equals_returns_false_for_different_strings():
+    assert_that(
+        evald('if(equals("foo", "bar"), {4;}, {5;});'),
+        equals(evald("5;"))
+    )
+
+
+@test
 def Equals_returns_false_for_different_types():
     assert_that(
         evald('if(equals(1, "1"), {4;}, {5;});'),
