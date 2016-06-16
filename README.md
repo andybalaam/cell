@@ -57,6 +57,7 @@ Cell has:
 * Numbers (floating-point)
 * Strings
 * Functions
+* A special "None" value
 
 That's about it.
 
