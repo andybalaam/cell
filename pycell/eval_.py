@@ -43,7 +43,10 @@ def _function_call(expr, env):
         fail_if_wrong_number_of_args(params[1:], args)
         return fn[1](env, *args)
     else:
-        assert False
+        raise Exception(
+            "Attempted to call something that is not a function: %s" %
+            str(fn)
+        )
 
 
 def eval_expr(expr, env):
@@ -52,6 +55,8 @@ def eval_expr(expr, env):
         return ("number", float(expr[1]))
     elif typ == "string":
         return ("string", expr[1])
+    elif typ == "none":
+        return ("none",)
     elif typ == "operation":
         return _operation(expr, env)
     elif typ == "symbol":

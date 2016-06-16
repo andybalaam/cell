@@ -59,6 +59,11 @@ def Value_of_an_assignment_is_the_value_assigned():
 
 
 @test
+def None_evaluates_to_None():
+    assert_that(eval_expr(("none",), Env()), equals(("none", )))
+
+
+@test
 def Calling_a_function_returns_its_last_value():
     assert_that(
         evald("{10;11;}();"),
