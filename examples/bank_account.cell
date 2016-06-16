@@ -1,0 +1,40 @@
+
+open_account = {
+    {
+        bal = 0.0;
+        {:(method_name)
+            if(equals("deposit", method_name),
+            {{:(amount)
+                set("bal", bal + amount);
+            }},
+            {
+                if(equals("withdraw", method_name),
+                {{:(amount)
+                    set("bal", bal - amount);
+                }},
+                {
+                    if(equals("balance", method_name),
+                        {bal;},
+                        {print("Unknown method!");}
+                    );
+                });
+            })
+        };
+    }();
+};
+
+
+acc1 = open_account();
+acc2 = open_account();
+
+acc1("deposit")(10.25);
+acc1("withdraw")(0.75);
+
+acc2("deposit")(5.42);
+
+print("acc1 balance=");
+print(acc1("balance"));
+print("");
+
+print("acc2 balance=");
+print(acc2("balance"));

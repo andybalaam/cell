@@ -1,0 +1,5 @@
+acc1 balance=
+9.5
+
+acc2 balance=
+5.42
