@@ -129,6 +129,7 @@ def Set_changes_value_of_symbol_in_outer_scope():
         equals(evald('"baz";'))
     )
 
+
 @test
 def Calling_set_with_nonstring_is_an_error():
     assert_fails(
@@ -136,4 +137,27 @@ def Calling_set_with_nonstring_is_an_error():
         + "('number', 3.0)",
         evald,
         "x = 3; set(x, 4);"
+    )
+
+
+@test
+def Can_make_a_pair_and_access_the_first_element():
+    assert_that(evald(
+        """
+        p = pair("foo", 4);
+        first(p);
+        """
+        ),
+        equals(evald("'foo';"))
+    )
+
+@test
+def Can_make_a_pair_and_access_the_second_element():
+    assert_that(evald(
+        """
+        p = pair("foo", 4);
+        second(p);
+        """
+        ),
+        equals(evald("4;"))
     )
