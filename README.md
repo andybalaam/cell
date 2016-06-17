@@ -81,8 +81,15 @@ the Cell program with no arguments:
 
 ## Building a language
 
-Cell provides more complex data structures using functions.  (More info
-coming soon, but see Lisp's `cons` etc. for the general idea.)
+Cell does not provide special syntax for things like lists, maps and
+objects, but they can be built up using the features of Cell functions.
+
+The Cell library contains functions like `pair` that makes a simple data
+structure from two values (more explanation at
+[Data Structures](data_structures.md).
+
+You can also build things that behave like objects in languages like Java and
+C++ out of functions.  There is more explanation at [Objects](objects.md).
 
 ## Explanations
 
