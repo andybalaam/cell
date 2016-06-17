@@ -1,0 +1,16 @@
+>>> cons = {:(head, tail)
+... {:(which)
+...     if(equals(which, "head"), {head;}, {tail;});
+... };
+... };
+<function>
+>>> car = {:(pair) pair("head");};
+<function>
+>>> cdr = {:(pair) pair("tail");};
+<function>
+>>> x = cons(3, 4);
+<function>
+>>> car(x);
+3
+>>> cdr(x);
+4
