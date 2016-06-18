@@ -81,7 +81,7 @@ the Cell program with no arguments:
 
 ## How to write Cell programs
 
-See the explanation of [Cell Syntax](syntax.md).
+See the explanation of [Cell Syntax](syntax.md), and [The if function](if.md).
 
 ## Building a language
 
