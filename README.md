@@ -90,10 +90,10 @@ objects, but they can be built up using the features of Cell functions.
 
 The Cell library contains functions like `pair` that makes a simple data
 structure from two values (more explanation at
-[Data Structures](data_structures.md).
+[Data Structures](data_structures.md) ).
 
 You can also build things that behave like objects in languages like Java and
-C++ out of functions.  There is more explanation at [Objects](objects.md).
+C++ out of functions.  There is more explanation at: [Objects](objects.md).
 
 ## Explanations
 
