@@ -14,7 +14,7 @@ print( x );
 ```
 <!-- end_include -->
 
-This program will print "yes!", because the `if` function returns its second
+This program will print "yes!", because the `if` function runs its second
 argument if its first argument is true.
 
 Before our normal program starts, Cell creates some functions and inserts them
