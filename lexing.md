@@ -33,3 +33,4 @@ When Cell's lexer hits a character that is not allowed in the current token,
 it ends this token, and starts another.  So, for example `print(` becomes two
 tokens: the symbol `print` and the punctuation `(`.
 
+As the lexer creates tokens, it passes them on to the [parser](parsing.md).

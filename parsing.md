@@ -131,3 +131,6 @@ function definitions:
 In the above code, `{ print "Even!"; }` is a tiny function with no name, that
 takes no arguments, and the `if` function will call it if its first argument
 evaluates to true.
+
+As the parser create tree structures, it passes them on to the
+[evaluator](evaluation.md).

@@ -128,4 +128,3 @@ until there is just one value left, which is returned somewhere, or thrown away
 In order to do useful thing like printing, and in Cell's case, even basic
 things like `if` or `for`, as well as changing values using `set`, we need some
 functions.  These are defined in the [Library](library.md).
-
