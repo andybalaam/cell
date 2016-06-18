@@ -33,7 +33,8 @@ def _function_call(expr, env):
         params = fn[1]
         fail_if_wrong_number_of_args(params, args)
         body = fn[2]
-        new_env = fn[3]
+        fn_env = fn[3]
+        new_env = Env(fn_env)
         for p, a in zip(params, args):
             new_env.set(p[1], a)
         return eval_list(body, new_env)

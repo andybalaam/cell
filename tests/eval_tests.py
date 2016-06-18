@@ -176,7 +176,7 @@ def A_native_function_can_edit_the_environment():
 @test
 def A_closure_holds_updateable_values():
     def dumb_set(env, sym, val):
-        env.parent.set(sym[1], val)
+        env.parent.parent.parent.set(sym[1], val)
 
     def dumb_if_equal(env, val1, val2, then_fn, else_fn):
         if val1 == val2:

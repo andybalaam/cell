@@ -1,0 +1,12 @@
+>>> p1 = pair(3, 4);
+<function>
+>>> p2 = pair(5, 6);
+<function>
+>>> first(p1);
+3
+>>> second(p1);
+4
+>>> first(p2);
+5
+>>> second(p2);
+6
