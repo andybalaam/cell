@@ -1,0 +1,4 @@
+welcome_message = {
+    print("Welcome, adventurer.");
+    print("The system awaits your command...");
+};

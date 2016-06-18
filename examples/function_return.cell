@@ -1,0 +1,4 @@
+square_half = {
+    x = 1 / 2;
+    x * x;
+};

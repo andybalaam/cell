@@ -1,0 +1,14 @@
+f1 = {
+    print( "I am f1." );
+};
+
+f2 = {
+    print( "And I am f2." );
+};
+
+do_both = {:(x, y)
+    x();
+    y();
+};
+
+do_both(f1, f2);

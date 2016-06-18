@@ -1,0 +1,2 @@
+I am f1.
+And I am f2.

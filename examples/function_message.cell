@@ -1,0 +1,6 @@
+{
+    print("Welcome to the world of...");
+    print("Cell Adventures!");
+    print("");
+    print("Press any key to continue.");
+};

@@ -1,0 +1,4 @@
+{
+    print("Camera 1");
+    print("Camera 2");
+}();

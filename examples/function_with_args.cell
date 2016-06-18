@@ -1,0 +1,5 @@
+sum_of_squares = {:(x, y)
+    sqx = x * x;
+    sqy = y * y;
+    sqx + sqy;
+};

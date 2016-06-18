@@ -79,6 +79,10 @@ the Cell program with no arguments:
 ```
 <!-- end_include -->
 
+## How to write Cell programs
+
+See the explanation of [Cell Syntax](syntax.md).
+
 ## Building a language
 
 Cell does not provide special syntax for things like lists, maps and
