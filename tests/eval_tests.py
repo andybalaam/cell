@@ -162,6 +162,30 @@ def Wrong_number_of_arguments_to_a_native_function_is_an_error():
 
 
 @test
+def Function_arguments_are_independent():
+    assert_that(evald(
+        """
+        fn = {:(x) {x;};};
+        a = fn("a");
+        b = fn("b");
+        a();
+        """
+        ),
+        equals(evald("'a';"))
+    )
+    assert_that(evald(
+        """
+        fn = {:(x) {x;};};
+        a = fn("a");
+        b = fn("b");
+        b();
+        """
+        ),
+        equals(evald("'b';"))
+    )
+
+
+@test
 def A_native_function_can_edit_the_environment():
     def mx3(env):
         env.set("x", ("number", 3))
