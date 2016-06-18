@@ -1,0 +1,19 @@
+flower = "rose";
+
+if ( equals( flower, "rose" ),
+    {
+        print( "The flower is a rose." );
+    },
+    {
+        print( "No roses today." );
+    }
+);
+
+if ( equals( flower, "violet" ),
+    {
+        print( "Violets!!!!" );
+    },
+    {
+        print( "No violets." );
+    }
+);
