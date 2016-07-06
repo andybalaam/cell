@@ -9,8 +9,53 @@ def compile_operation(expr, env):
     )
 
 
+def native_equals(args, env):
+    if len(args) != 2:
+        raise Exception(
+            "Wrong number of argumentss to equals - expected 2, but got %d"
+                % len(args)
+        )
+    else:
+        return "(%s===%s)" % tuple(compile_expr(e, env) for e in args)
+
+
+def native_if(args, env):
+    if len(args) != 3:
+        raise Exception(
+            "Wrong number of arguments to equals - expected 2, but got %d"
+                % len(args)
+        )
+    else:
+        return (
+            """function()
+{
+    if( %s !== 0 )
+    {
+%s}
+    else
+    {
+%s}
+}();
+""" % (
+            compile_expr(args[0], env),
+            compile_list(args[1][2], env, 8, True),
+            compile_list(args[2][2], env, 8, True)
+        )
+    )
+
 def compile_call(expr, env):
-    return "%s()" % compile_expr(expr[1], env)
+    fn_name = compile_expr(expr[1], env)
+    if fn_name == "equals":
+        return native_equals(expr[2], env)
+    if fn_name == "if":
+        return native_if(expr[2], env)
+    else:
+        return (
+            "%s(%s)" % (
+                fn_name,
+                ", ".join(compile_expr(e, env) for e in expr[2])
+            )
+        )
 
 
 def compile_assignment(expr, env):
