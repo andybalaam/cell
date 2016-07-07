@@ -69,7 +69,7 @@ def Compiling_a_string_containing_a_quote_gives_it_escaped():
 def Compiling_an_empty_function_gives_function():
     assert_that(
         compiled("{};"),
-        equals("(function() {\n})\n;\n")
+        equals("(function() {\n});\n")
     )
 
 
@@ -77,7 +77,7 @@ def Compiling_an_empty_function_gives_function():
 def Compiling_a_nonempty_function_gives_function():
     assert_that(
         compiled("{3; 4;};"),
-        equals("(function() {\n    3;\n    return 4;\n})\n;\n")
+        equals("(function() {\n    3;\n    return 4;\n});\n")
     )
 
 
@@ -85,7 +85,7 @@ def Compiling_a_nonempty_function_gives_function():
 def Compiling_a_function_with_args_gives_function():
     assert_that(
         compiled("{:(foo, bar) foo+bar;};"),
-        equals("(function(foo, bar) {\n    return foo + bar;\n})\n;\n")
+        equals("(function(foo, bar) {\n    return foo + bar;\n});\n")
     )
 
 
@@ -101,7 +101,7 @@ def Compiling_an_assignment_gives_var_statement():
 def Compiling_a_function_call_gives_a_function_call():
     assert_that(
         compiled("foo = {}; foo();"),
-        equals("var foo = (function() {\n})\n;\nfoo();\n")
+        equals("var foo = (function() {\n});\nfoo();\n")
     )
 
 
@@ -109,7 +109,7 @@ def Compiling_a_function_call_gives_a_function_call():
 def Compiling_a_function_call_with_args_includes_them():
     assert_that(
         compiled("foo = {:(x, y)}; foo(3, 'a');"),
-        equals("var foo = (function(x, y) {\n})\n;\nfoo(3, 'a');\n")
+        equals("var foo = (function(x, y) {\n});\nfoo(3, 'a');\n")
     )
 
 
@@ -132,6 +132,25 @@ def Compiling_use_of_if_renders_immediately_called_function():
         return 'false';
     }
 })();\n""")
+    )
+
+
+@test
+def Nested_blocks_indent():
+    assert_that(
+        compiled("at = {if(1, {{'t'}}, {'f'})};"),
+        equals("""var at = (function() {
+    return (function() {
+        if( 1 !== 0 ) {
+            return (function() {
+                return 't';
+            });
+        } else {
+            return 'f';
+        }
+    })();
+});
+""")
     )
 
 

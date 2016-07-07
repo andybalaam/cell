@@ -38,9 +38,10 @@ def equals(expected):
                 + " as expected."
             )
             if len(ret) > 80:
-                ret = "Values are not equal:\n%s\n%s\n" % (
-                    repr(self.actual), repr(self.expected)
-                )
+                ret = """Values are not equal (actual then expected):
+%s
+%s
+""" % ( repr(self.actual), repr(self.expected))
             return ret
     return EqualsMatcher(expected)
 
