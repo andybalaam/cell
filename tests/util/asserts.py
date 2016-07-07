@@ -31,12 +31,17 @@ def equals(expected):
             return actual == expected
 
         def description(self):
-            return (
+            ret = (
                 repr(self.actual)
                 + " does not equal "
                 + repr(self.expected)
                 + " as expected."
             )
+            if len(ret) > 80:
+                ret = "Values are not equal:\n%s\n%s\n" % (
+                    repr(self.actual), repr(self.expected)
+                )
+            return ret
     return EqualsMatcher(expected)
 
 

@@ -69,7 +69,7 @@ def Compiling_a_string_containing_a_quote_gives_it_escaped():
 def Compiling_an_empty_function_gives_function():
     assert_that(
         compiled("{};"),
-        equals("function()\n{\n}\n;\n")
+        equals("(function() {\n})\n;\n")
     )
 
 
@@ -77,7 +77,7 @@ def Compiling_an_empty_function_gives_function():
 def Compiling_a_nonempty_function_gives_function():
     assert_that(
         compiled("{3; 4;};"),
-        equals("function()\n{\n    3;\n    return 4;\n}\n;\n")
+        equals("(function() {\n    3;\n    return 4;\n})\n;\n")
     )
 
 
@@ -85,7 +85,7 @@ def Compiling_a_nonempty_function_gives_function():
 def Compiling_a_function_with_args_gives_function():
     assert_that(
         compiled("{:(foo, bar) foo+bar;};"),
-        equals("function(foo, bar)\n{\n    return foo + bar;\n}\n;\n")
+        equals("(function(foo, bar) {\n    return foo + bar;\n})\n;\n")
     )
 
 
@@ -101,7 +101,7 @@ def Compiling_an_assignment_gives_var_statement():
 def Compiling_a_function_call_gives_a_function_call():
     assert_that(
         compiled("foo = {}; foo();"),
-        equals("var foo = function()\n{\n}\n;\nfoo();\n")
+        equals("var foo = (function() {\n})\n;\nfoo();\n")
     )
 
 
@@ -109,7 +109,7 @@ def Compiling_a_function_call_gives_a_function_call():
 def Compiling_a_function_call_with_args_includes_them():
     assert_that(
         compiled("foo = {:(x, y)}; foo(3, 'a');"),
-        equals("var foo = function(x, y)\n{\n}\n;\nfoo(3, 'a');\n")
+        equals("var foo = (function(x, y) {\n})\n;\nfoo(3, 'a');\n")
     )
 
 
@@ -117,7 +117,7 @@ def Compiling_a_function_call_with_args_includes_them():
 def Compiling_use_of_equals_renders_triple_equals():
     assert_that(
         compiled("equals(4, 5);"),
-        equals("(4===5);\n")
+        equals("(4===5 ? 1 : 0);\n")
     )
 
 
@@ -125,17 +125,29 @@ def Compiling_use_of_equals_renders_triple_equals():
 def Compiling_use_of_if_renders_immediately_called_function():
     assert_that(
         compiled("if(1, {'true'}, {'false'});"),
-        equals("""function()
-{
-    if( 1 !== 0 )
-    {
+        equals("""(function() {
+    if( 1 !== 0 ) {
         return 'true';
+    } else {
+        return 'false';
     }
-    else
-    {
-        return 'false'
-    }
-}();\n""")
+})();\n""")
+    )
+
+
+@test
+def Compiling_use_of_print_renders_console_log():
+    assert_that(
+        compiled("print(1);"),
+        equals("console.log(1);\n")
+    )
+
+
+@test
+def Compiling_use_of_set_renders_assignment():
+    assert_that(
+        compiled("set('xyz', 1);"),
+        equals("(xyz = 1);\n")
     )
 
 

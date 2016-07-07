@@ -57,8 +57,9 @@ def All_examples_evaluate():
                 assert_that(stdout.getvalue(), equals(outputfile.read()))
 
 
-#@system_test
+@system_test
 def All_examples_work_in_js():
+    import os
     from subprocess import check_output
     from pycell.chars_in_file import chars_in_file
     from pycell.compile_ import compile_list
@@ -69,5 +70,7 @@ def All_examples_work_in_js():
                 for c in compile_list(parse(lex(chars_in_file(exfl))), env):
                     compfl.write(c)
         with open(example[:-5] + ".output.txt") as outputfile:
-            stdout = check_output(["node", "compiled.js"])
+            stdout = check_output(
+                ["node", "compiled.js"], universal_newlines=True )
             assert_that(stdout, equals(outputfile.read()))
+        os.remove("compiled.js")
