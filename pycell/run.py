@@ -7,8 +7,8 @@ from pycell.lexer import lex
 from pycell.parser import parse
 
 
-def run(argv, stdin, stdout, stderr):
+def run(filename, stdin, stdout, stderr):
     env = Env(stdin=stdin, stdout=stdout, stderr=stdout)
     pycell.library.import_(env)
-    with open(argv[1], encoding="ascii") as f:
+    with open(filename, encoding="ascii") as f:
         eval_list(parse(lex(chars_in_file(f))), env)

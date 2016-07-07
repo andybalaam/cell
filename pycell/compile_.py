@@ -1,5 +1,10 @@
+import pycell.library
 
-# TODO: remove env if not needed
+from pycell.chars_in_file import chars_in_file
+from pycell.env import Env
+from pycell.lexer import lex
+from pycell.parser import parse
+
 
 def compile_operation(expr, env, indent):
     return "%s %s %s" % (
@@ -141,3 +146,12 @@ def compile_list(exprs, env, indent=0, return_last = False):
         ret += compile_expr(expr, env, indent)
         ret += ";\n"
     return ret
+
+
+def compile_(output, filename):
+    env = Env()
+    pycell.library.import_(env)
+    with open(filename, encoding="ascii") as infile:
+        with open(output, "w") as outfile:
+            outfile.write(
+                compile_list(parse(lex(chars_in_file(infile))), env))
