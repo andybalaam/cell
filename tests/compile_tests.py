@@ -170,6 +170,18 @@ def Compiling_use_of_set_renders_assignment():
     )
 
 
+@test
+def Defining_function_with_js_keyword_name_mangles_it():
+    assert_that(
+        compiled("for = {7 + 3;};for();"),
+        equals("""var for__ = (function() {
+    return 7 + 3;
+});
+for__();
+""")
+    )
+
+
 # TODO: compiler should check e.g. symbols exist.  Share with parser?
 # TODO: what about an assignment within another expression?
 # TODO: similar for if etc.

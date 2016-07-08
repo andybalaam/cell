@@ -1,0 +1,8 @@
+
+stations = list3("Syon Lane", "Brentford", "Kew Bridge");
+
+for( stations,
+    {:(s)
+        print(s);
+    }
+);

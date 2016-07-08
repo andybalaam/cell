@@ -116,6 +116,16 @@ def compile_function_def(expr, env, indent):
     return ret
 
 
+js_keywords = ("for", )
+
+def mangle_symbol(sym):
+    if sym in js_keywords:
+        return sym + "__"
+    elif sym == "None":
+        return "null"
+    else:
+        return sym
+
 def compile_expr(expr, env, indent):
     typ = expr[0]
     if typ == "number":
@@ -123,7 +133,7 @@ def compile_expr(expr, env, indent):
     elif typ == "string":
         return "'%s'" % expr[1].replace("'","\\'")
     elif typ == "symbol":
-        return expr[1]
+        return mangle_symbol(expr[1])
     elif typ == "function":
         return compile_function_def(expr, env, indent)
     elif typ == "assignment":
@@ -150,8 +160,9 @@ def compile_list(exprs, env, indent=0, return_last = False):
 
 def compile_(output, filename):
     env = Env()
-    pycell.library.import_(env)
-    with open(filename, encoding="ascii") as infile:
-        with open(output, "w") as outfile:
+    with open(output, "w") as outfile:
+        outfile.write(
+            compile_list(parse(lex(pycell.library.as_text(env))), env))
+        with open(filename, encoding="ascii") as infile:
             outfile.write(
                 compile_list(parse(lex(chars_in_file(infile))), env))

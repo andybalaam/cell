@@ -3,6 +3,7 @@ from io import StringIO
 
 import pycell.library
 
+from pycell.compile_ import compile_
 from pycell.env import Env
 from pycell.eval_ import eval_list
 from pycell.lexer import lex
@@ -64,13 +65,11 @@ def All_examples_work_in_js():
     from pycell.chars_in_file import chars_in_file
     from pycell.compile_ import compile_list
     for example in all_examples():
-        with open(example, "r") as exfl:
-            with open("compiled.js", "w") as compfl:
-                env = Env()
-                for c in compile_list(parse(lex(chars_in_file(exfl))), env):
-                    compfl.write(c)
+        compile_("compiled.js", example)
         with open(example[:-5] + ".output.txt") as outputfile:
-            stdout = check_output(
-                ["node", "compiled.js"], universal_newlines=True )
-            assert_that(stdout, equals(outputfile.read()))
+            expected = outputfile.read()
+
+        stdout = check_output(
+            ["node", "compiled.js"], universal_newlines=True )
+        assert_that(stdout, equals(expected))
         os.remove("compiled.js")
