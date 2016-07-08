@@ -52,7 +52,7 @@ def All_examples_evaluate():
     from pycell.run import run
     for example in all_examples():
         with StringIO() as stdin, StringIO() as stdout:
-            run(["", example], stdin, stdout, stdout)
+            run(example, stdin, stdout, stdout)
             with open(example[:-5] + ".output.txt") as outputfile:
                 assert_that(stdout.getvalue(), equals(outputfile.read()))
 
