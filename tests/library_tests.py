@@ -173,3 +173,9 @@ def Can_make_a_pair_and_access_the_second_element():
         ),
         equals(evald("4;"))
     )
+
+
+@test
+def Len_gives_the_length_of_a_string():
+    assert_that(evald("len('');"), equals(evald("0;")))
+    assert_that(evald("len('abc');"), equals(evald("3;")))
