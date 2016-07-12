@@ -181,6 +181,32 @@ def List0_is_None():
 
 
 @test
+def Can_append_item_to_an_empty_list():
+    assert_that(evald("first( append(list0(), 3));"), equals(evald("3;")))
+    assert_that(evald("second(append(list0(), 3));"), equals(evald("None;")))
+
+
+@test
+def Can_append_item_to_a_nonempty_list():
+    assert_that(
+        evald("first(append(list2(1, 2), 3));"),
+        equals(evald("1;"))
+    )
+    assert_that(
+        evald("first(second(append(list2(1, 2), 3)));"),
+        equals(evald("2;"))
+    )
+    assert_that(
+        evald("first(second(second(append(list2(1, 2), 3))));"),
+        equals(evald("3;"))
+    )
+    assert_that(
+        evald("second(second(second(append(list2(1, 2), 3))));"),
+        equals(evald("None;"))
+    )
+
+
+@test
 def Len_gives_the_length_of_a_string():
     assert_that(evald("len('');"), equals(evald("0;")))
     assert_that(evald("len('abc');"), equals(evald("3;")))

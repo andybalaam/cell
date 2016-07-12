@@ -9,6 +9,17 @@ list5 = {:(a, b, c, d, e) pair(a, list4(b, c, d, e));};
 
 prepend = pair;
 
+append =
+{:(lst, item)
+    if(equals(lst, None),
+    {
+        list1(item);
+    },
+    {
+        pair(first(lst), append(second(lst), item));
+    });
+};
+
 for = {:(xs, fn)
     fn(first(xs));
     tail = second(xs);
