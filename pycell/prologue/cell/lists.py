@@ -1,5 +1,6 @@
 
 lists = """
+list0 = {None};
 list1 = {:(a)             pair(a, None);};
 list2 = {:(a, b)          pair(a, list1(b));};
 list3 = {:(a, b, c)       pair(a, list2(b, c));};

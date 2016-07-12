@@ -176,6 +176,11 @@ def Can_make_a_pair_and_access_the_second_element():
 
 
 @test
+def List0_is_None():
+    assert_that(evald("list0();"), equals(evald("None;")))
+
+
+@test
 def Len_gives_the_length_of_a_string():
     assert_that(evald("len('');"), equals(evald("0;")))
     assert_that(evald("len('abc');"), equals(evald("3;")))
