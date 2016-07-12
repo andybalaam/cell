@@ -210,3 +210,11 @@ def Can_append_item_to_a_nonempty_list():
 def Len_gives_the_length_of_a_string():
     assert_that(evald("len('');"), equals(evald("0;")))
     assert_that(evald("len('abc');"), equals(evald("3;")))
+
+
+@test
+def Char_at_gives_the_nth_character_of_a_string():
+    assert_that(evald("char_at(0, 'abc');"), equals(evald("'a';")))
+    assert_that(evald("char_at(1, 'abc');"), equals(evald("'b';")))
+    assert_that(evald("char_at(2, 'abc');"), equals(evald("'c';")))
+    assert_that(evald("char_at(3, 'abc');"), equals(evald("None;")))
