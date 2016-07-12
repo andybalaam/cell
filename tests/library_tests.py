@@ -98,6 +98,18 @@ def Functions_are_not_equal_even_if_the_same():
 
 
 @test
+def Different_functions_are_not_equal():
+    assert_that(
+        evald('if(equals({:(x)3;}, {3;}), {4;}, {5;});'),
+        equals(evald("5;"))
+    )
+    assert_that(
+        evald('if(equals({3;}, {2; 3;}), {4;}, {5;});'),
+        equals(evald("5;"))
+    )
+
+
+@test
 def Print_prints_to_stdout():
     stdout = StringIO()
     evald('print("foo");', stdout=stdout)
