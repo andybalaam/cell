@@ -18,12 +18,12 @@ def _operation(expr, env):
         raise Exception("Unknown operation: " + expr[1])
 
 
-def fail_if_wrong_number_of_args(params, args):
+def fail_if_wrong_number_of_args(fn_name, params, args):
     if len(params) != len(args):
         raise Exception((
-            "%d arguments passed to function, but it "
+            "%d arguments passed to function %s, but it "
             + "requires %d arguments."
-        ) % (len(args), len(params)))
+        ) % (len(args), fn_name, len(params)))
 
 
 def _function_call(expr, env):
@@ -31,7 +31,7 @@ def _function_call(expr, env):
     args = list((eval_expr(a, env) for a in expr[2]))
     if fn[0] == "function":
         params = fn[1]
-        fail_if_wrong_number_of_args(params, args)
+        fail_if_wrong_number_of_args(expr[1], params, args)
         body = fn[2]
         fn_env = fn[3]
         new_env = Env(fn_env)
@@ -41,7 +41,7 @@ def _function_call(expr, env):
     elif fn[0] == "native":
         py_fn = fn[1]
         params = inspect.getargspec(py_fn).args
-        fail_if_wrong_number_of_args(params[1:], args)
+        fail_if_wrong_number_of_args(expr[1], params[1:], args)
         return fn[1](env, *args)
     else:
         raise Exception(

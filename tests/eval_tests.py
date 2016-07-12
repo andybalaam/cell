@@ -131,11 +131,11 @@ def Native_function_gets_called():
 def Wrong_number_of_arguments_to_a_function_is_an_error():
     assert_prog_fails(
         "{}(3);",
-        "1 arguments passed to function, but it requires 0 arguments."
+        "1 arguments passed to function ('function', [], []), but it requires 0 arguments."
     )
     assert_prog_fails(
         "x={:(a, b, c)}; x(3, 2);",
-        "2 arguments passed to function, but it requires 3 arguments."
+        "2 arguments passed to function ('symbol', 'x'), but it requires 3 arguments."
     )
 
 
@@ -151,12 +151,12 @@ def Wrong_number_of_arguments_to_a_native_function_is_an_error():
     env.set("native_fn3", ("native", native_fn3))
     assert_prog_fails(
         "native_fn0(3);",
-        "1 arguments passed to function, but it requires 0 arguments.",
+        "1 arguments passed to function ('symbol', 'native_fn0'), but it requires 0 arguments.",
         env
     )
     assert_prog_fails(
         "native_fn3(3, 2);",
-        "2 arguments passed to function, but it requires 3 arguments.",
+        "2 arguments passed to function ('symbol', 'native_fn3'), but it requires 3 arguments.",
         env
     )
 
