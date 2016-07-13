@@ -6,7 +6,7 @@ that reflect the expressions that are allowed in the language.
 
 
 You can find Cell's parser at:
-https://github.com/andybalaam/cell/blob/master/cell/parser.py
+https://github.com/andybalaam/cell/blob/master/pycell/parser.py
 and the tests for it at:
 https://github.com/andybalaam/cell/blob/master/tests/parser_tests.py
 
