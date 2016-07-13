@@ -9,7 +9,7 @@ The lexer reads in characters one by one, and decides what type of token they
 are, and then spits out tokens as it finds them.
 
 You can find Cell's lexer at:
-https://github.com/andybalaam/cell/blob/master/cell/lexer.py
+https://github.com/andybalaam/cell/blob/master/pycell/lexer.py
 and the tests for it at:
 https://github.com/andybalaam/cell/blob/master/tests/lexer_tests.py .
 
