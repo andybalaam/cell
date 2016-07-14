@@ -10,6 +10,7 @@ import pycell.prologue.native.len_
 import pycell.prologue.native.print_
 import pycell.prologue.native.set_
 
+import pycell.prologue.cell.chars_in
 import pycell.prologue.cell.pairs
 import pycell.prologue.cell.lists
 
@@ -25,6 +26,7 @@ def import_(env):
 
     eval_list(parse(lex(pycell.prologue.cell.pairs.pairs)), env)
     eval_list(parse(lex(pycell.prologue.cell.lists.lists)), env)
+    eval_list(parse(lex(pycell.prologue.cell.chars_in.chars_in)), env)
 
 
 def as_text(env):
