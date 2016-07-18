@@ -221,6 +221,13 @@ def Char_at_gives_the_nth_character_of_a_string():
 
 
 @test
+def Not_negates():
+    assert_that(evald("not(0);"), equals(evald("1;")))
+    assert_that(evald("not(1);"), equals(evald("0;")))
+    assert_that(evald("not(2);"), equals(evald("0;")))
+
+
+@test
 def For_loops_through_everything_in_a_list():
     stdout = StringIO()
     evald(
