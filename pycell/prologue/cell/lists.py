@@ -21,11 +21,12 @@ append =
 };
 
 for = {:(xs, fn)
-    fn(first(xs));
-    tail = second(xs);
-    if (equals(tail, None),
-        {},
-        {for(tail, fn);}
-    );
+    if(not(equals(xs, None)),
+    {
+        fn(first(xs));
+        for(second(xs), fn);
+    },
+    {
+    });
 };
 """

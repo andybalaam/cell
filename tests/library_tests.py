@@ -243,6 +243,21 @@ def For_loops_through_everything_in_a_list():
 
 
 @test
+def For_loops_through_nothing_when_given_empty_list():
+    stdout = StringIO()
+    evald(
+        """
+        for(list0(),
+        {:(ch)
+            print(ch);
+        });
+        """,
+        stdout=stdout
+    )
+    assert_that(stdout.getvalue(), equals(""))
+
+
+@test
 def Chars_in_allows_iterating_over_the_characters_of_a_string():
     stdout = StringIO()
     evald(
