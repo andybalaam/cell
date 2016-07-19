@@ -1,0 +1,90 @@
+
+"--- Should be in standard library --";
+
+fail =
+{:(msg)
+    failing_because_this_symbol_does_not_exist;
+};
+
+"--- Lexer ---";
+lex =
+{
+    {:(char)
+        list1("(");
+    };
+};
+
+"--- Test Utils ---";
+
+assert_that =
+{:(obj, matcher)
+    if(not(matcher("matches")(obj)),
+    {
+        fail(matcher("description"));
+    },
+    {
+        "nothing";
+    });
+};
+
+equals_m =
+{:(expected)
+    e = expected;
+    a = None;
+    {:(method)
+        if(equals(method, "matches"),
+        {
+            {:(other)
+                set("a", other);
+                equals(e, other);
+            };
+        },
+        {
+            "Assume method is description";
+            "TODO: allow concatenating strings!";
+            a;
+        });
+    };
+};
+
+test =
+{:(name, cod)
+    print(name);
+    cod();
+};
+
+"--- Lexer tests --";
+
+lexed =
+{:(str)
+    lexer = lex();
+    ret = list0();
+    for(chars_in(str),
+    {:(ch)
+        token = lexer(ch);
+        if(not(equals(token, None)),
+        {
+            set("ret", pair(token, ret));
+        },
+        {
+        });
+    });
+    ret;
+};
+
+
+
+test("Empty file produces nothing",
+{
+    assert_that(lexed(""), equals_m(list0()));
+});
+
+test("Open bracket produces open bracket token",
+{
+    l = lexed("(");
+    assert_that(first(first(l)), equals_m("("));
+    assert_that(second(first(l)), equals_m(None));
+    assert_that(second(l), equals_m(None));
+});
+
+

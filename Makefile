@@ -11,4 +11,5 @@ compile: ${docs}
 
 test: compile
 	./run_all_tests
+	./cell incell/cell.cell
 
