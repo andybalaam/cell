@@ -218,6 +218,8 @@ def Char_at_gives_the_nth_character_of_a_string():
     assert_that(evald("char_at(1, 'abc');"), equals(evald("'b';")))
     assert_that(evald("char_at(2, 'abc');"), equals(evald("'c';")))
     assert_that(evald("char_at(3, 'abc');"), equals(evald("None;")))
+    assert_that(evald("char_at(0, ''   );"), equals(evald("None;")))
+    assert_that(evald("char_at(1, ''   );"), equals(evald("None;")))
 
 
 @test
@@ -270,3 +272,18 @@ def Chars_in_allows_iterating_over_the_characters_of_a_string():
         stdout=stdout
     )
     assert_that(stdout.getvalue(), equals("a\nb\nc\n"))
+
+
+#@test
+def Chars_in_deals_well_with_empty_string():
+    stdout = StringIO()
+    evald(
+        """
+        for(chars_in(""),
+        {:(ch)
+            print(ch);
+        });
+        """,
+        stdout=stdout
+    )
+    assert_that(stdout.getvalue(), equals(""))
