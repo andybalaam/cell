@@ -6,11 +6,33 @@ fail =
     failing_because_this_symbol_does_not_exist;
 };
 
+char_in =
+{:(haystack, needle)
+    ret = 0;
+    for(chars_in(haystack),
+    {:(h_ch)
+        if(equals(needle, h_ch),
+        {
+            set("ret", 1);
+        },
+        {
+        });
+    });
+    ret;
+};
+
+
 "--- Lexer ---";
 lex =
 {
     {:(char)
-        list1("(");
+        if(char_in("(){}", char),
+        {
+            list2(char, "");
+        },
+        {
+            list2("symbol", char);
+        });
     };
 };
 
@@ -47,10 +69,64 @@ equals_m =
     };
 };
 
+
+lists_equal =
+{:(e, a)
+    if(equals(e, None),
+    {
+        equals(a, None);
+    },
+    {
+        if(equals(a, None),
+        {
+            print("a None, but e not.");
+            0;
+        },
+        {
+            if(equals(first(e), first(a)),
+            {
+                lists_equal(second(e), second(a));
+            },
+            {
+                print("Firsts not equal");
+                print(first(e));
+                print(first(a));
+                0;
+            });
+        });
+    });
+};
+
+lists_equal_m =
+{:(expected)
+    e = expected;
+    a = None;
+    {:(method)
+        if(equals(method, "matches"),
+        {
+            {:(other)
+                set("a", other);
+                lists_equal(e, a);
+            };
+        },
+        {
+            "Assume method is description";
+            "TODO: allow concatenating strings!";
+            a;
+        });
+    };
+};
+
 test =
 {:(name, cod)
     print(name);
     cod();
+};
+
+skiptest =
+{:(name, code)
+    print("SKIPPING:");
+    print(name);
 };
 
 "--- Lexer tests --";
@@ -64,7 +140,7 @@ lexed =
         token = lexer(ch);
         if(not(equals(token, None)),
         {
-            set("ret", pair(token, ret));
+            set("ret", append(ret, token));
         },
         {
         });
@@ -82,9 +158,42 @@ test("Empty file produces nothing",
 test("Open bracket produces open bracket token",
 {
     l = lexed("(");
-    assert_that(first(first(l)), equals_m("("));
-    assert_that(second(first(l)), equals_m(None));
+    assert_that(first(l), lists_equal_m(list2("(", "")));
     assert_that(second(l), equals_m(None));
 });
 
+test("Close bracket produces close bracket token",
+{
+    l = lexed(")");
+    assert_that(first(l), lists_equal_m(list2(")", "")));
+    assert_that(second(l), equals_m(None));
+});
 
+test("Open brace produces open brace token",
+{
+    l = lexed("{");
+    assert_that(first(l), lists_equal_m(list2("{", "")));
+    assert_that(second(l), equals_m(None));
+});
+
+test("Close brace produces close brace token",
+{
+    l = lexed("}");
+    assert_that(first(l), lists_equal_m(list2("}", "")));
+    assert_that(second(l), equals_m(None));
+});
+
+test("Multiple brackets become multiple tokens",
+{
+    l = lexed("()");
+    assert_that(first(l),         lists_equal_m(list2("(", "")));
+    assert_that(first(second(l)), lists_equal_m(list2(")", "")));
+    assert_that(second(second(l)), equals_m(None));
+});
+
+test("Single letter becomes a symbol token",
+{
+    l = lexed("a");
+    assert_that(first(l), lists_equal_m(list2("symbol", "a")));
+    assert_that(second(l), equals_m(None));
+});
