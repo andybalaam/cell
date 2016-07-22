@@ -287,3 +287,19 @@ def Chars_in_deals_well_with_empty_string():
         stdout=stdout
     )
     assert_that(stdout.getvalue(), equals(""))
+
+
+@test
+def Concat_two_empty_strings_gives_empty_string():
+    assert_that(evald("concat('', '');"), equals(evald("'';")))
+
+
+@test
+def Concat_a_string_with_an_empty_makes_the_string():
+    assert_that(evald("concat('abc', '');"), equals(evald("'abc';")))
+    assert_that(evald("concat('', 'abc');"), equals(evald("'abc';")))
+
+
+@test
+def Concat_two_strings_sticks_them_together():
+    assert_that(evald("concat('foo', 'bar');"), equals(evald("'foobar';")))

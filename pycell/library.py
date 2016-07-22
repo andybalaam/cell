@@ -4,6 +4,7 @@ from pycell.parser import parse
 from pycell.eval_ import eval_list
 
 import pycell.prologue.native.char_at
+import pycell.prologue.native.concat
 import pycell.prologue.native.equals
 import pycell.prologue.native.if_
 import pycell.prologue.native.len_
@@ -18,6 +19,7 @@ import pycell.prologue.cell.lists
 
 def import_(env):
     env.set("char_at", ("native", pycell.prologue.native.char_at.char_at))
+    env.set("concat",  ("native", pycell.prologue.native.concat.concat))
     env.set("equals",  ("native", pycell.prologue.native.equals.equals))
     env.set("if",      ("native", pycell.prologue.native.if_.if_))
     env.set("len",     ("native", pycell.prologue.native.len_.len_))
