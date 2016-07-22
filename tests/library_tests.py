@@ -274,7 +274,7 @@ def Chars_in_allows_iterating_over_the_characters_of_a_string():
     assert_that(stdout.getvalue(), equals("a\nb\nc\n"))
 
 
-#@test
+@test
 def Chars_in_deals_well_with_empty_string():
     stdout = StringIO()
     evald(
