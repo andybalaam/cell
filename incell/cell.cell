@@ -23,17 +23,56 @@ char_in =
 
 
 "--- Lexer ---";
+"Call lex() once to make a lexer.";
+"Then feed it one character at a time by calling it.";
+"It will return None if it has not yet completed a token,";
+"or a token (a list2()) if it has.";
+"Make sure you call it once more after all characters, passing";
+"None as the argument, so it can give you its last token.";
 lex =
 {
-    {:(char)
-        if(char_in("(){}", char),
-        {
-            list2(char, "");
-        },
-        {
-            list2("symbol", char);
-        });
-    };
+    {
+        mode = None;
+        part = None;
+        {:(char)
+            if(equals(char, None),
+            {
+                if(equals(part, None),
+                {
+                    None;
+                },
+                {
+                    list2(mode, part);
+                });
+            },
+            {
+                if(equals(mode, None),
+                {
+                    if(char_in("(){}", char),
+                    {
+                        set("part", None);
+                        set("mode", None);
+                        list2(char, "");
+                    },
+                    {
+                        set("mode", "symbol");
+                        set("part", char);
+                        None;
+                    });
+                },
+                {
+                    if(equals(mode, "symbol"),
+                    {
+                        set("part", concat(part, char));
+                        None;
+                    },
+                    {
+                        unknown_mode;
+                    });
+                });
+            });
+        };
+    }();
 };
 
 "--- Test Utils ---";
@@ -135,16 +174,20 @@ lexed =
 {:(str)
     lexer = lex();
     ret = list0();
+    handle_token =
+        {:(t)
+            if(not(equals(t, None)),
+            {
+                set("ret", append(ret, t));
+            },
+            {
+            });
+        };
     for(chars_in(str),
     {:(ch)
-        token = lexer(ch);
-        if(not(equals(token, None)),
-        {
-            set("ret", append(ret, token));
-        },
-        {
-        });
+        handle_token(lexer(ch));
     });
+    handle_token(lexer(None));
     ret;
 };
 
@@ -195,5 +238,12 @@ test("Single letter becomes a symbol token",
 {
     l = lexed("a");
     assert_that(first(l), lists_equal_m(list2("symbol", "a")));
+    assert_that(second(l), equals_m(None));
+});
+
+test("Multiple letters become a symbol token",
+{
+    l = lexed("foo");
+    assert_that(first(l), lists_equal_m(list2("symbol", "foo")));
     assert_that(second(l), equals_m(None));
 });
