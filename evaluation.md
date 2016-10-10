@@ -3,7 +3,7 @@
 An evaluator takes in tree structures that come from the [parser](parsing.md)
 and works out what they mean.
 
-The parser does not look up symbols to find out what is function or value you
+The parser does not look up symbols to find out the function or value you
 are talking about - it just recognises known shapes and builds them into a
 structure.
 
