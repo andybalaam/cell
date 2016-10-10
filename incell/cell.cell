@@ -34,40 +34,58 @@ lex =
     {
         mode = None;
         part = None;
+
+        end_tok =
+        {
+            if(equals(part, None),
+            {
+                None;
+            },
+            {
+                p = part;
+                m = mode;
+                set("part", None);
+                set("mode", None);
+                list2(m, p);
+            });
+        };
+
         {:(char)
             if(equals(char, None),
             {
-                if(equals(part, None),
-                {
-                    None;
-                },
-                {
-                    list2(mode, part);
-                });
+                print("char==None");
+                r = end_tok();
+                print(concat("r==", first(r)));
+                r;
             },
             {
-                if(equals(mode, None),
+                if(char_in("(){}", char),
                 {
-                    if(char_in("(){}", char),
+                    print("char in (){}");
+                    ret = end_tok();
+                    set("part", None);
+                    set("mode", char);
+                    ret;
+                },
+                {
+                    if(equals(mode, None),
                     {
-                        set("part", None);
-                        set("mode", None);
-                        list2(char, "");
-                    },
-                    {
+                        print("mode==None");
                         set("mode", "symbol");
                         set("part", char);
                         None;
-                    });
-                },
-                {
-                    if(equals(mode, "symbol"),
-                    {
-                        set("part", concat(part, char));
-                        None;
                     },
                     {
-                        unknown_mode;
+                        if(equals(mode, "symbol"),
+                        {
+                            print("mode==symbol");
+                            set("part", concat(part, char));
+                            None;
+                        },
+                        {
+                            print(concat("mode=", mode));
+                            unknown_mode;
+                        });
                     });
                 });
             });
@@ -246,4 +264,13 @@ test("Multiple letters become a symbol token",
     l = lexed("foo");
     assert_that(first(l), lists_equal_m(list2("symbol", "foo")));
     assert_that(second(l), equals_m(None));
+});
+
+
+test("Symbol followed by a bracket becomes two tokens",
+{
+    l = lexed("foo(");
+    assert_that(first(l), lists_equal_m(list2("symbol", "foo")));
+    assert_that(first(second(l)), lists_equal_m(list2("(", "")));
+    assert_that(second(second(l)), equals_m(None));
 });
