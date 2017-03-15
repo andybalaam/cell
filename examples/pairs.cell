@@ -1,4 +1,4 @@
-pair =
+pair_ =
     {:( f, s )
         {:( which )
             if( equals( which, "f" ),
@@ -8,6 +8,6 @@ pair =
         };
     };
 
-first = {:(p) p("f");};
+first_ = {:(p) p("f");};
 
-second = {:(p) p("s");};
+second_ = {:(p) p("s");};

@@ -69,6 +69,8 @@ def eval_expr(expr, env):
             return ret
     elif typ == "assignment":
         var_name = expr[1][1]
+        if var_name in env.items:
+            raise Exception("Not allowed to re-assign symbol '%s'." % var_name)
         val = eval_expr(expr[2], env)
         env.set(var_name, val)
         return val

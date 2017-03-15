@@ -27,7 +27,7 @@ from within functions, and the fact that those returned functions can
 
 <!-- include "examples/pairs.cell" -->
 ```
-pair =
+pair_ =
     {:( f, s )
         {:( which )
             if( equals( which, "f" ),
@@ -37,19 +37,19 @@ pair =
         };
     };
 
-first = {:(p) p("f");};
+first_ = {:(p) p("f");};
 
-second = {:(p) p("s");};
+second_ = {:(p) p("s");};
 ```
 <!-- end_include -->
 
-`pair` is a function that returns a function.  The returned function
+`pair_` is a function that returns a function.  The returned function
 takes one argument.  If that argument is "f", it returns the first
-argument passed in to `pair` (called `f`).  If not, it returns the second
+argument passed in to `pair_` (called `f`).  If not, it returns the second
 (`s`).
 
-The `first` and `second` functions just call the function that was returned
-from `pair`, passing in either "f" or "s" to get the argument they want.
+The `first_` and `second_` functions just call the function that was returned
+from `pair_`, passing in either "f" or "s" to get the argument they want.
 
 Once you get your head around this, you understand "closures", which are
 a fundamental structure in many functional programming languages, and

@@ -54,6 +54,11 @@ def Can_define_a_value_and_retrieve_it():
 
 
 @test
+def Modifying_a_value_is_an_error():
+    assert_prog_fails("x = 30;x = 10;", "Not allowed to re-assign symbol 'x'.")
+
+
+@test
 def Value_of_an_assignment_is_the_value_assigned():
     assert_that(evald("x = 31;"), equals(("number", 31)))
 
