@@ -119,3 +119,9 @@ arithmetic).
 While the Evaluator is running, it has access to the [Library](library.md),
 which is a set of standard values and functions that all programs can use.
 
+## See also
+
+* [Video series about how to write a programming language](https://www.youtube.com/watch?v=TG0qRDrUPpA&list=PLgyU3jNA6VjT3FW83eHqryNcqd6fsvdrv)
+* [My ACCU Conference talk about Cell](https://www.youtube.com/watch?v=82-XjMzKaC8)
+* [Slides for the videos](https://github.com/andybalaam/videos-writing-cell)
+* [datecalc](https://github.com/andybalaam/datecalc) - an even smaller language
