@@ -1,0 +1,57 @@
+%YAML 1.2
+---
+# See http://www.sublimetext.com/docs/3/syntax.html
+file_extensions:
+  - cell
+scope: source.cell
+contexts:
+  main:
+    # character
+    - match: '"'
+      scope: punctuation.definition.string.begin
+      push: double_quoted_string
+
+    - match: "'"
+      scope: punctuation.definition.string.begin
+      push: single_quoted_string
+
+    # Comments begin with a '#' and finish at the end of the line
+    - match: '#'
+      scope: punctuation.definition.comment
+      push: line_comment
+
+    # Keywords are if, print and equals.
+    - match: '\b(if|print|equals|char_at|len|concat|set|None)\b'
+      scope: keyword.control
+
+    - match: ','
+      scope: punctuation.separator
+
+    - match: ';'
+      scope: punctuation.terminator
+
+    # Numbers
+    - match: '\b(-)?[0-9.]+\b'
+      scope: constant.numeric
+
+
+  double_quoted_string:
+    - meta_scope: string.quoted.double
+    - match: '\\.'
+      scope: constant.character.escape
+    - match: '"'
+      scope: punctuation.definition.string.end
+      pop: true
+
+  single_quoted_string:
+    - meta_scope: string.quoted.single
+    - match: '\\.'
+      scope: constant.character.escape
+    - match: "'"
+      scope: punctuation.definition.string.end
+      pop: true
+
+  line_comment:
+    - meta_scope: comment.line
+    - match: $
+      pop: true
