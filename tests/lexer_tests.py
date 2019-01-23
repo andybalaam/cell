@@ -14,6 +14,10 @@ def lexed(inp):
 
 # --- Lexing ---
 
+@test
+def Comments_are_ignored():
+    assert_that(lexed("# this is a comment"), equals([]))
+
 
 @test
 def Empty_file_produces_nothing():

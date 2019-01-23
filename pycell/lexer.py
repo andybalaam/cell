@@ -23,11 +23,17 @@ def _scan_string(delim, chars):
     return ret
 
 
+def _scan_comment(c, chars):
+    while c is not None and c != "\n":
+        c = chars.move_next()
+
+
 def lex(chars_iter):
     chars = PeekableStream(chars_iter)
     while chars.next is not None:
         c = chars.move_next()
         if c in " \n":              pass           # Ignore white space
+        elif c == "#":              _scan_comment(c, chars)
         elif c in "(){},;=:":       yield (c, "")  # Special characters
         elif c in "+-*/":           yield ("operation", c)
         elif c in ("'", '"'):       yield ("string", _scan_string(c, chars))
